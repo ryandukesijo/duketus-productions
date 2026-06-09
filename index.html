@@ -1737,16 +1737,54 @@ function shuffleArr(arr) {
 })();
 
 
-function submitForm() {
-  document.getElementById('form-wrap').style.display = 'none';
-  document.getElementById('form-success').style.display = 'block';
-  // Reset after 4s
-  setTimeout(() => {
-    document.getElementById('form-wrap').style.display = 'block';
-    document.getElementById('form-success').style.display = 'none';
-    ['f-name','f-email','f-msg'].forEach(id => document.getElementById(id).value = '');
-    document.getElementById('f-service').selectedIndex = 0;
-  }, 4000);
+async function submitForm() {
+  const name    = document.getElementById('f-name').value.trim();
+  const email   = document.getElementById('f-email').value.trim();
+  const service = document.getElementById('f-service').value;
+  const msg     = document.getElementById('f-msg').value.trim();
+
+  if (!name || !email || !msg) {
+    alert('Bitte Name, E-Mail und Nachricht ausfüllen.');
+    return;
+  }
+
+  const btn = document.querySelector('.btn-primary.btn-full');
+  btn.textContent = 'Wird gesendet…';
+  btn.disabled = true;
+
+  try {
+    const res = await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        access_key: '281bcb57-6b4b-4d36-b569-b12dc93574e0',
+        subject: `Neue Anfrage von ${name} — ${service || 'Duketus Productions'}`,
+        from_name: 'Duketus Productions Website',
+        name, email,
+        message: `Paket: ${service}\n\n${msg}`,
+        botcheck: ''
+      })
+    });
+    const data = await res.json();
+    if (data.success) {
+      document.getElementById('form-wrap').style.display = 'none';
+      document.getElementById('form-success').style.display = 'block';
+      setTimeout(() => {
+        document.getElementById('form-wrap').style.display = 'block';
+        document.getElementById('form-success').style.display = 'none';
+        ['f-name','f-email','f-msg'].forEach(id => document.getElementById(id).value = '');
+        document.getElementById('f-service').selectedIndex = 0;
+        btn.textContent = 'Anfrage absenden →';
+        btn.disabled = false;
+      }, 4000);
+    } else {
+      throw new Error('Fehler beim Senden');
+    }
+  } catch(e) {
+    btn.textContent = 'Anfrage absenden →';
+    btn.disabled = false;
+    alert('Fehler beim Senden. Bitte versuche es erneut oder schreib direkt an hello@duketus-productions.de');
+  }
 }
 </script>
 </body>
