@@ -162,7 +162,7 @@ a{text-decoration:none}
 
 /* ── PORTFOLIO ── */
 .port-card{border-radius:8px;overflow:hidden;position:relative;
-  aspect-ratio:16/9;cursor:pointer;border:1px solid var(--line);
+  aspect-ratio:9/16;cursor:pointer;border:1px solid var(--line);
   box-shadow:var(--sh0);transition:all .25s}
 .port-card:hover{transform:translateY(-4px);box-shadow:var(--sh2);border-color:var(--orange)}
 .port-overlay{position:absolute;inset:0;background:rgba(24,24,47,.6);
@@ -271,6 +271,9 @@ a{text-decoration:none}
   box-shadow:0 0 5px #4ade80;display:inline-block;flex-shrink:0}
 
 /* ── HERO SLIDESHOW ── */
+  /* Hide slide placeholder text when image is present */
+  .hero-slide img[src]:not([src=""]) ~ .slide-placeholder { display:none !important; }
+
 .hero-slide{
   position:absolute;inset:0;opacity:0;
   transition:opacity .9s ease;
@@ -435,8 +438,8 @@ a{text-decoration:none}
               <!-- ── SLIDE 1: Fashion Hypermotion ── -->
               <div class="hero-slide active" style="background:linear-gradient(145deg,#1e0835,#0a0520,#18182f)">
                 <!-- ▼▼▼ Bild-URL hier eintragen: src="https://..." ▼▼▼ -->
-                <img src="" alt="Oversized Hoodie Hypermotion" src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030341/Oversized_Hoodie_-_Dark_Mask_gnoxrr.png" onerror="this.style.display='none'">
-                <div style="position:relative;z-index:1;text-align:center;padding:24px">
+                <img src="" alt="Oversized Hoodie Hypermotion" src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030341/Oversized_Hoodie_-_Dark_Mask_gnoxrr.png" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.9;z-index:0">
+                <div class="slide-placeholder" style="position:relative;z-index:1;text-align:center;padding:24px">
                   <div style="width:80px;height:110px;margin:0 auto 16px;border:1px solid rgba(255,107,43,.25);border-radius:6px;display:flex;align-items:center;justify-content:center;background:rgba(255,107,43,.04)">
                     <div class="corner tl" style="top:0;left:0"></div><div class="corner br" style="bottom:0;right:0"></div>
                     <span style="font-size:2rem;opacity:.25">◼</span>
@@ -449,8 +452,8 @@ a{text-decoration:none}
 
               <!-- ── SLIDE 2: Fashion Editorial ── -->
               <div class="hero-slide" style="background:linear-gradient(145deg,#14062a,#0e0620,#18182f)">
-                <img src="" alt="Oversized Hoodie Editorial" src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030348/Oversized_Hoodie_-_Rooftop_pfmxmo.png" onerror="this.style.display='none'">
-                <div style="position:relative;z-index:1;text-align:center;padding:24px">
+                <img src="" alt="Oversized Hoodie Editorial" src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030348/Oversized_Hoodie_-_Rooftop_pfmxmo.png" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.9;z-index:0">
+                <div class="slide-placeholder" style="position:relative;z-index:1;text-align:center;padding:24px">
                   <div style="width:80px;height:110px;margin:0 auto 16px;border:1px solid rgba(255,107,43,.25);border-radius:6px;display:flex;align-items:center;justify-content:center;background:rgba(255,107,43,.04)">
                     <div class="corner tl" style="top:0;left:0"></div><div class="corner br" style="bottom:0;right:0"></div>
                     <span style="font-size:2rem;opacity:.25">◼</span>
@@ -463,8 +466,8 @@ a{text-decoration:none}
 
               <!-- ── SLIDE 3: Fashion UGC ── -->
               <div class="hero-slide" style="background:linear-gradient(145deg,#1a0f2e,#0f0820,#18182f)">
-                <img src="" alt="Oversized Hoodie UGC" src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030353/Oversized_Hoodie_-_Street_takxsk.png" onerror="this.style.display='none'">
-                <div style="position:relative;z-index:1;text-align:center;padding:24px">
+                <img src="" alt="Oversized Hoodie UGC" src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030353/Oversized_Hoodie_-_Street_takxsk.png" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.9;z-index:0">
+                <div class="slide-placeholder" style="position:relative;z-index:1;text-align:center;padding:24px">
                   <div style="width:80px;height:110px;margin:0 auto 16px;border:1px solid rgba(255,107,43,.25);border-radius:6px;display:flex;align-items:center;justify-content:center;background:rgba(255,107,43,.04)">
                     <div class="corner tl" style="top:0;left:0"></div><div class="corner br" style="bottom:0;right:0"></div>
                     <span style="font-size:2rem;opacity:.25">◼</span>
@@ -477,8 +480,8 @@ a{text-decoration:none}
 
               <!-- ── SLIDE 4: Lifestyle TV Spot ── -->
               <div class="hero-slide" style="background:linear-gradient(145deg,#0f0820,#160d2a,#18182f)">
-                <img src="" alt="Creeo Noir TV Spot" src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030454/Creeo_Noir_Parfum_-_Male_Model_Front_hjdrch.png" onerror="this.style.display='none'">
-                <div style="position:relative;z-index:1;text-align:center;padding:24px">
+                <img src="" alt="Creeo Noir TV Spot" src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030454/Creeo_Noir_Parfum_-_Male_Model_Front_hjdrch.png" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.9;z-index:0">
+                <div class="slide-placeholder" style="position:relative;z-index:1;text-align:center;padding:24px">
                   <div style="width:80px;height:110px;margin:0 auto 16px;border:1px solid rgba(255,107,43,.25);border-radius:6px;display:flex;align-items:center;justify-content:center;background:rgba(255,107,43,.04)">
                     <div class="corner tl" style="top:0;left:0"></div><div class="corner br" style="bottom:0;right:0"></div>
                     <span style="font-size:2rem;opacity:.25">◼</span>
@@ -491,8 +494,8 @@ a{text-decoration:none}
 
               <!-- ── SLIDE 5: Lifestyle Hypermotion ── -->
               <div class="hero-slide" style="background:linear-gradient(145deg,#100820,#1c0d38,#18182f)">
-                <img src="" alt="Creeo Noir Hypermotion" src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030458/Creeo_Noir_Parfum_-_Penthouse_nbujxg.png" onerror="this.style.display='none'">
-                <div style="position:relative;z-index:1;text-align:center;padding:24px">
+                <img src="" alt="Creeo Noir Hypermotion" src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030458/Creeo_Noir_Parfum_-_Penthouse_nbujxg.png" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.9;z-index:0">
+                <div class="slide-placeholder" style="position:relative;z-index:1;text-align:center;padding:24px">
                   <div style="width:80px;height:110px;margin:0 auto 16px;border:1px solid rgba(255,107,43,.25);border-radius:6px;display:flex;align-items:center;justify-content:center;background:rgba(255,107,43,.04)">
                     <div class="corner tl" style="top:0;left:0"></div><div class="corner br" style="bottom:0;right:0"></div>
                     <span style="font-size:2rem;opacity:.25">◼</span>
@@ -505,8 +508,8 @@ a{text-decoration:none}
 
               <!-- ── SLIDE 6: Lifestyle UGC ── -->
               <div class="hero-slide" style="background:linear-gradient(145deg,#130920,#180d30,#18182f)">
-                <img src="" alt="Creeo Noir UGC" src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030787/Creeo_Cr.5_Facial_Cream_-_Front_wlrakt.png" onerror="this.style.display='none'">
-                <div style="position:relative;z-index:1;text-align:center;padding:24px">
+                <img src="" alt="Creeo Noir UGC" src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030787/Creeo_Cr.5_Facial_Cream_-_Front_wlrakt.png" onerror="this.style.display='none'" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.9;z-index:0">
+                <div class="slide-placeholder" style="position:relative;z-index:1;text-align:center;padding:24px">
                   <div style="width:80px;height:110px;margin:0 auto 16px;border:1px solid rgba(255,107,43,.25);border-radius:6px;display:flex;align-items:center;justify-content:center;background:rgba(255,107,43,.04)">
                     <div class="corner tl" style="top:0;left:0"></div><div class="corner br" style="bottom:0;right:0"></div>
                     <span style="font-size:2rem;opacity:.25">◼</span>
@@ -879,6 +882,7 @@ a{text-decoration:none}
       <div id="cat-VF" class="grid-port">
         <div class="port-card" style="background:linear-gradient(145deg,#1e0835,var(--navy))" onclick="openModal('Dark Hypermotion Spot','Oversized Hoodie','HYPERMOTION','https://res.cloudinary.com/dga2fdwnj/video/upload/v1781025524/Oversized_Hoodie_Dark_Hypermotion_Spot_ariusa.mp4')">
           <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="https://res.cloudinary.com/dga2fdwnj/video/upload/so_auto,f_jpg,q_auto/v1781025524/Oversized_Hoodie_Dark_Hypermotion_Spot_ariusa.jpg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.75" onerror="this.style.display='none'">
           <div class="port-overlay"><div class="play-btn">▶</div></div>
           <span style="position:absolute;top:12px;left:12px"><span class="tag tag-dark" style="font-size:9px">HYPERMOTION</span></span>
           <span style='position:absolute;top:12px;right:12px;width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 5px #4ade80;display:block'></span>
@@ -886,6 +890,7 @@ a{text-decoration:none}
         </div>
         <div class="port-card" style="background:linear-gradient(145deg,#14062a,var(--navy))" onclick="openModal('Dark Editorial Spot','Oversized Hoodie','EDITORIAL','https://res.cloudinary.com/dga2fdwnj/video/upload/v1781025506/Oversized_Hoodie_Dark_Editorial_Spot_cqdfpf.mp4')">
           <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="https://res.cloudinary.com/dga2fdwnj/video/upload/so_auto,f_jpg,q_auto/v1781025506/Oversized_Hoodie_Dark_Editorial_Spot_cqdfpf.jpg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.75" onerror="this.style.display='none'">
           <div class="port-overlay"><div class="play-btn">▶</div></div>
           <span style="position:absolute;top:12px;left:12px"><span class="tag tag-dark" style="font-size:9px">EDITORIAL</span></span>
           <span style='position:absolute;top:12px;right:12px;width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 5px #4ade80;display:block'></span>
@@ -893,6 +898,7 @@ a{text-decoration:none}
         </div>
         <div class="port-card" style="background:linear-gradient(145deg,#1a0f2e,var(--navy))" onclick="openModal('UGC Creator Ad','Oversized Hoodie','UGC','https://res.cloudinary.com/dga2fdwnj/video/upload/v1781025522/Oversized_Hoodie_UGC_emahls.mp4')">
           <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="https://res.cloudinary.com/dga2fdwnj/video/upload/so_auto,f_jpg,q_auto/v1781025522/Oversized_Hoodie_UGC_emahls.jpg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.75" onerror="this.style.display='none'">
           <div class="port-overlay"><div class="play-btn">▶</div></div>
           <span style="position:absolute;top:12px;left:12px"><span class="tag tag-dark" style="font-size:9px">UGC</span></span>
           <span style='position:absolute;top:12px;right:12px;width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 5px #4ade80;display:block'></span>
@@ -903,6 +909,7 @@ a{text-decoration:none}
       <div id="cat-VL" class="grid-port" style="display:none">
         <div class="port-card" style="background:linear-gradient(145deg,#0f0820,var(--navy))" onclick="openModal('TV Spot','Creeo Cr 5 Noir EDP','TV SPOT','https://res.cloudinary.com/dga2fdwnj/video/upload/v1781025601/Creeo_Cr.5_Noir_EDP_-_TV_Spot_ypjqcf.mp4')">
           <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="https://res.cloudinary.com/dga2fdwnj/video/upload/so_auto,f_jpg,q_auto/v1781025601/Creeo_Cr.5_Noir_EDP_-_TV_Spot_ypjqcf.jpg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.75" onerror="this.style.display='none'">
           <div class="port-overlay"><div class="play-btn">▶</div></div>
           <span style="position:absolute;top:12px;left:12px"><span class="tag tag-dark" style="font-size:9px">TV SPOT</span></span>
           <span style='position:absolute;top:12px;right:12px;width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 5px #4ade80;display:block'></span>
@@ -910,6 +917,7 @@ a{text-decoration:none}
         </div>
         <div class="port-card" style="background:linear-gradient(145deg,#160d2a,var(--navy))" onclick="openModal('Hypermotion Ad','Creeo Cr 5 Noir EDP','HYPERMOTION','https://res.cloudinary.com/dga2fdwnj/video/upload/v1781025602/Creeo_Cr.5_Noir_EDP_-_Hypermotion_ge5vx9.mp4')">
           <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="https://res.cloudinary.com/dga2fdwnj/video/upload/so_auto,f_jpg,q_auto/v1781025602/Creeo_Cr.5_Noir_EDP_-_Hypermotion_ge5vx9.jpg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.75" onerror="this.style.display='none'">
           <div class="port-overlay"><div class="play-btn">▶</div></div>
           <span style="position:absolute;top:12px;left:12px"><span class="tag tag-dark" style="font-size:9px">HYPERMOTION</span></span>
           <span style='position:absolute;top:12px;right:12px;width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 5px #4ade80;display:block'></span>
@@ -917,6 +925,7 @@ a{text-decoration:none}
         </div>
         <div class="port-card" style="background:linear-gradient(145deg,#130920,var(--navy))" onclick="openModal('UGC Creator Ad','Creeo Cr 5 Noir EDP','UGC','https://res.cloudinary.com/dga2fdwnj/video/upload/v1781025544/Creeo_Cr.5_Noir_EDP_-_UGC_ge3oro.mp4')">
           <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="https://res.cloudinary.com/dga2fdwnj/video/upload/so_auto,f_jpg,q_auto/v1781025544/Creeo_Cr.5_Noir_EDP_-_UGC_ge3oro.jpg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.75" onerror="this.style.display='none'">
           <div class="port-overlay"><div class="play-btn">▶</div></div>
           <span style="position:absolute;top:12px;left:12px"><span class="tag tag-dark" style="font-size:9px">UGC</span></span>
           <span style='position:absolute;top:12px;right:12px;width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 5px #4ade80;display:block'></span>
@@ -927,6 +936,7 @@ a{text-decoration:none}
       <div id="cat-VB" class="grid-port" style="display:none">
         <div class="port-card" style="background:linear-gradient(145deg,#1a0828,#0d0820)" onclick="openModal('UGC Application','Creeo Cr.5 Facial Cream','UGC','https://res.cloudinary.com/dga2fdwnj/video/upload/v1781030877/Creeo_Cr.5_UGC_Application_MCK_yb4lwr.mp4')">
           <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="https://res.cloudinary.com/dga2fdwnj/video/upload/so_auto,f_jpg,q_auto/v1781030877/Creeo_Cr.5_UGC_Application_MCK_yb4lwr.jpg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.75" onerror="this.style.display='none'">
           <div class="port-overlay"><div class="play-btn">▶</div></div>
           <span style="position:absolute;top:12px;left:12px"><span class="tag tag-dark" style="font-size:9px">UGC</span></span>
           <span style='position:absolute;top:12px;right:12px;width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 5px #4ade80;display:block'></span>
@@ -934,6 +944,7 @@ a{text-decoration:none}
         </div>
         <div class="port-card" style="background:linear-gradient(145deg,#0e0820,#180d30)" onclick="openModal('UGC Unboxing','Creeo Cr.5 Facial Cream','UNBOXING','https://res.cloudinary.com/dga2fdwnj/video/upload/v1781030927/Creeo_Cr.5_UGC_Unboxing_MCK_dfajpr.mp4')">
           <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="https://res.cloudinary.com/dga2fdwnj/video/upload/so_auto,f_jpg,q_auto/v1781030927/Creeo_Cr.5_UGC_Unboxing_MCK_dfajpr.jpg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.75" onerror="this.style.display='none'">
           <div class="port-overlay"><div class="play-btn">▶</div></div>
           <span style="position:absolute;top:12px;left:12px"><span class="tag tag-dark" style="font-size:9px">UNBOXING</span></span>
           <span style='position:absolute;top:12px;right:12px;width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 5px #4ade80;display:block'></span>
@@ -944,6 +955,7 @@ a{text-decoration:none}
       <div id="cat-VC" class="grid-port" style="display:none">
         <div class="port-card" style="background:linear-gradient(145deg,#1a0800,#0f0800)" onclick="openModal('Hypermotion Spot','Cr.5 Premium Chips','HYPERMOTION','https://res.cloudinary.com/dga2fdwnj/video/upload/v1781025763/Cr.5_Premium_Chips_Hypermotion_ist0ju.mp4')">
           <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="https://res.cloudinary.com/dga2fdwnj/video/upload/so_auto,f_jpg,q_auto/v1781025763/Cr.5_Premium_Chips_Hypermotion_ist0ju.jpg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.75" onerror="this.style.display='none'">
           <div class="port-overlay"><div class="play-btn">▶</div></div>
           <span style="position:absolute;top:12px;left:12px"><span class="tag tag-dark" style="font-size:9px">HYPERMOTION</span></span>
           <span style='position:absolute;top:12px;right:12px;width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 5px #4ade80;display:block'></span>
@@ -951,6 +963,7 @@ a{text-decoration:none}
         </div>
         <div class="port-card" style="background:linear-gradient(145deg,#200a00,#180800)" onclick="openModal('TV Spot','Cr.5 Premium Chips','TV SPOT','https://res.cloudinary.com/dga2fdwnj/video/upload/v1781025731/Cr.5_Premium_Chips_TV_Spot_Final_svjdrt.mp4')">
           <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="https://res.cloudinary.com/dga2fdwnj/video/upload/so_auto,f_jpg,q_auto/v1781025731/Cr.5_Premium_Chips_TV_Spot_Final_svjdrt.jpg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.75" onerror="this.style.display='none'">
           <div class="port-overlay"><div class="play-btn">▶</div></div>
           <span style="position:absolute;top:12px;left:12px"><span class="tag tag-dark" style="font-size:9px">TV SPOT</span></span>
           <span style='position:absolute;top:12px;right:12px;width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 5px #4ade80;display:block'></span>
@@ -958,6 +971,7 @@ a{text-decoration:none}
         </div>
         <div class="port-card" style="background:linear-gradient(145deg,#150800,#0f0800)" onclick="openModal('UGC Creator Ad','Cr.5 Premium Chips','UGC','https://res.cloudinary.com/dga2fdwnj/video/upload/v1781025738/Cr.5_Premium_Chips_UGC_ydwrzi.mp4')">
           <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="https://res.cloudinary.com/dga2fdwnj/video/upload/so_auto,f_jpg,q_auto/v1781025738/Cr.5_Premium_Chips_UGC_ydwrzi.jpg" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.75" onerror="this.style.display='none'">
           <div class="port-overlay"><div class="play-btn">▶</div></div>
           <span style="position:absolute;top:12px;left:12px"><span class="tag tag-dark" style="font-size:9px">UGC</span></span>
           <span style='position:absolute;top:12px;right:12px;width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 5px #4ade80;display:block'></span>
