@@ -1,0 +1,1625 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Duketus Productions — AI Content Services</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ── RESET & TOKENS ─────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+:root{
+  --orange:#FF6B2B; --orange-l:#FF9A6C; --orange-t:#FFF1E8; --orange-b:#FFB899;
+  --navy:#18182F; --navy-m:#232340;
+  --cream:#F9F7F4; --white:#fff;
+  --text:#1C1C1C; --muted:#6B6B6B;
+  --warm:#EEE9E2; --blue:#9BA3BB;
+  --line:#E8E2DB;
+  --sh0:0 2px 8px rgba(24,24,47,.07);
+  --sh1:0 4px 20px rgba(24,24,47,.11);
+  --sh2:0 8px 40px rgba(24,24,47,.17);
+}
+body{font-family:'Poppins',sans-serif;background:var(--cream);color:var(--text);line-height:1.6;overflow-x:hidden}
+button,input,textarea,select{font-family:'Poppins',sans-serif}
+a{text-decoration:none}
+.mono{font-family:'IBM Plex Mono',monospace}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes scaleIn{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:scale(1)}}
+.au{animation:fadeUp .6s ease both}
+.ai{animation:fadeIn .5s ease both}
+.d1{animation-delay:.1s}.d2{animation-delay:.2s}.d3{animation-delay:.3s}
+.d4{animation-delay:.4s}.d5{animation-delay:.5s}
+
+/* ── LAYOUT ── */
+.container{max-width:1100px;margin:0 auto;padding:0 40px}
+.page{display:none;min-height:calc(100vh - 62px)}
+.page.active{display:block}
+
+/* ── EYEBROW ── */
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:500;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--orange);
+  display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.eyebrow::before{content:'';width:20px;height:1px;background:var(--orange)}
+
+/* ── TAG ── */
+.tag{display:inline-flex;align-items:center;padding:3px 11px;border-radius:4px;
+  background:var(--orange-t);border:1px solid var(--orange-b);
+  font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:500;
+  color:var(--orange);letter-spacing:.06em;white-space:nowrap}
+.tag-dark{background:var(--navy-m);border-color:rgba(255,107,43,.2);color:var(--warm)}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  padding:12px 26px;border-radius:6px;font-size:14px;font-weight:600;
+  border:none;cursor:pointer;transition:all .2s;white-space:nowrap}
+.btn-primary{background:var(--orange);color:#fff;box-shadow:0 4px 14px rgba(255,107,43,.3)}
+.btn-primary:hover{background:#e85a1e;transform:translateY(-1px);box-shadow:0 6px 20px rgba(255,107,43,.4)}
+.btn-outline{background:transparent;color:var(--warm);border:1px solid rgba(155,163,187,.3)}
+.btn-outline:hover{border-color:var(--orange);color:var(--orange);background:rgba(255,107,43,.06)}
+.btn-ghost{background:transparent;color:var(--orange);border:1.5px solid var(--orange-b)}
+.btn-ghost:hover{background:var(--orange-t)}
+.btn-sm{padding:8px 18px;font-size:13px}
+.btn-lg{padding:14px 32px;font-size:15px}
+.btn-full{width:100%}
+
+/* ── NAV ── */
+.nav{position:fixed;top:0;left:0;right:0;height:62px;z-index:200;
+  background:rgba(24,24,47,.97);backdrop-filter:blur(12px);
+  border-bottom:2px solid var(--orange);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 40px;gap:24px}
+.nav-logo{font-size:14px;font-weight:700;color:var(--warm);cursor:pointer;
+  display:flex;align-items:center;gap:3px;white-space:nowrap;background:none;border:none}
+.nav-logo .dot{color:var(--orange)}
+.nav-logo .sub{font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:400;
+  color:var(--blue);margin-left:8px;letter-spacing:.05em;
+  border-left:1px solid rgba(155,163,187,.25);padding-left:8px}
+.nav-links{display:flex;gap:2px;list-style:none}
+.nav-btn{font-size:12px;font-weight:500;color:var(--blue);padding:6px 14px;
+  border-radius:4px;background:none;border:none;cursor:pointer;transition:all .18s}
+.nav-btn:hover,.nav-btn.active{color:var(--warm);background:rgba(255,107,43,.1)}
+.nav-btn.active{color:var(--orange)}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;
+  background:none;border:none;padding:4px}
+.hamburger span{width:22px;height:1.5px;background:var(--warm);transition:all .25s;display:block}
+.ham-open span:nth-child(1){transform:rotate(45deg) translateY(6.5px)}
+.ham-open span:nth-child(2){opacity:0}
+.ham-open span:nth-child(3){transform:rotate(-45deg) translateY(-6.5px)}
+
+/* ── MOBILE MENU ── */
+.mobile-menu{display:none;position:fixed;inset:62px 0 0 0;z-index:199;
+  background:rgba(24,24,47,.98);backdrop-filter:blur(12px);
+  flex-direction:column;align-items:center;justify-content:center;gap:8px;
+  animation:fadeIn .2s ease}
+.mobile-menu.open{display:flex}
+.mob-btn{font-size:18px;font-weight:600;color:var(--warm);background:none;border:none;
+  cursor:pointer;padding:12px 32px;border-radius:6px;width:220px;text-align:center;
+  transition:all .18s}
+.mob-btn:hover,.mob-btn.active{color:var(--orange);background:rgba(255,107,43,.08)}
+
+/* ── HERO ── */
+.hero{background:var(--navy);padding:120px 0 80px;padding-top:calc(62px + 58px);
+  position:relative;overflow:hidden}
+.hero-inner{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.hero-grid{position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(rgba(255,107,43,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,107,43,.04) 1px,transparent 1px);
+  background-size:48px 48px}
+.hero-corner{position:absolute;pointer-events:none;width:28px;height:28px}
+.hero-corner::before,.hero-corner::after{content:'';position:absolute;
+  border-color:rgba(255,107,43,.25);border-style:solid;width:28px;height:28px}
+.hero-corner.tl{top:80px;left:32px}
+.hero-corner.tl::before{top:0;left:0;border-width:1px 0 0 1px}
+.hero-corner.br{bottom:40px;right:32px}
+.hero-corner.br::after{bottom:0;right:0;border-width:0 1px 1px 0}
+.hero-glow{position:absolute;width:600px;height:600px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,107,43,.06) 0%,transparent 68%);
+  pointer-events:none}
+
+/* ── PAGE BANNER ── */
+.page-banner{background:var(--navy);padding:60px 0 52px;
+  border-bottom:2px solid var(--orange);position:relative;overflow:hidden}
+.page-banner .hero-grid{opacity:.6}
+
+/* ── CARDS ── */
+.card{background:var(--white);border-radius:8px;border:1px solid var(--line);
+  box-shadow:var(--sh0);transition:transform .25s,box-shadow .25s,border-color .25s;
+  overflow:hidden;position:relative}
+.card:hover{transform:translateY(-4px);box-shadow:var(--sh1);border-color:var(--orange-b)}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--orange);transform:scaleX(0);transition:transform .25s;transform-origin:left}
+.card:hover::before{transform:scaleX(1)}
+
+/* ── SERVICE CARD ── */
+.service-card{background:var(--white);border-radius:8px;padding:32px;
+  border:1px solid var(--line);box-shadow:var(--sh0);
+  transition:all .25s;position:relative;overflow:hidden}
+.service-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--orange),var(--orange-l),transparent);
+  transform:scaleX(0);transition:transform .3s;transform-origin:left}
+.service-card:hover{transform:translateY(-4px);box-shadow:var(--sh1);border-color:var(--orange-b)}
+.service-card:hover::before{transform:scaleX(1)}
+.feat-li{font-size:13px;padding:7px 0;border-bottom:1px solid var(--line);
+  display:flex;align-items:center;gap:10px}
+.feat-li::before{content:"→";color:var(--orange);font-family:'IBM Plex Mono',monospace;font-size:11px;flex-shrink:0}
+
+/* ── PROCESS BOX ── */
+.process-box{background:var(--navy);border-radius:10px;padding:40px;
+  position:relative;overflow:hidden}
+.process-box .hero-grid{opacity:.5}
+
+/* ── CORNER BRACKETS ── */
+.corner{position:absolute;width:16px;height:16px}
+.corner.tl{top:0;left:0;border-top:1px solid rgba(255,107,43,.3);border-left:1px solid rgba(255,107,43,.3)}
+.corner.br{bottom:0;right:0;border-bottom:1px solid rgba(255,107,43,.3);border-right:1px solid rgba(255,107,43,.3)}
+.corner.tr{top:0;right:0;border-top:1px solid rgba(255,107,43,.3);border-right:1px solid rgba(255,107,43,.3)}
+.corner.bl{bottom:0;left:0;border-bottom:1px solid rgba(255,107,43,.3);border-left:1px solid rgba(255,107,43,.3)}
+
+/* ── PORTFOLIO ── */
+.port-card{border-radius:8px;overflow:hidden;position:relative;
+  aspect-ratio:16/9;cursor:pointer;border:1px solid var(--line);
+  box-shadow:var(--sh0);transition:all .25s}
+.port-card:hover{transform:translateY(-4px);box-shadow:var(--sh2);border-color:var(--orange)}
+.port-overlay{position:absolute;inset:0;background:rgba(24,24,47,.6);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;transition:opacity .25s}
+.port-card:hover .port-overlay{opacity:1}
+.play-btn{width:54px;height:54px;border-radius:50%;background:var(--orange);
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:18px;box-shadow:0 4px 20px rgba(255,107,43,.5);
+  transition:transform .2s}
+.port-card:hover .play-btn{transform:scale(1.08)}
+.port-grid-inner{position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(rgba(255,107,43,.06) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,107,43,.06) 1px,transparent 1px);
+  background-size:24px 24px}
+.port-bottom{position:absolute;bottom:0;left:0;right:0;padding:28px 14px 14px;
+  background:linear-gradient(transparent,rgba(24,24,47,.92))}
+
+/* ── CAT TABS ── */
+.cat-tab{padding:7px 18px;border-radius:4px;
+  border:1px solid var(--line);background:var(--white);color:var(--muted);
+  cursor:pointer;transition:all .2s;
+  font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.05em}
+.cat-tab:hover{border-color:var(--orange-b);color:var(--orange);background:var(--orange-t)}
+.cat-tab.active{background:var(--orange);border-color:var(--orange);color:#fff;
+  box-shadow:0 3px 12px rgba(255,107,43,.3)}
+.cat-tab:disabled{opacity:.4;cursor:not-allowed}
+
+/* ── PRICING ── */
+.price-card{background:var(--white);border-radius:8px;padding:36px 28px;
+  border:1px solid var(--line);box-shadow:var(--sh0);position:relative;transition:all .25s}
+.price-card:hover{transform:translateY(-5px);box-shadow:var(--sh1)}
+.price-card.featured{background:var(--navy);border-color:var(--orange);
+  box-shadow:0 8px 40px rgba(255,107,43,.18)}
+.price-card.featured:hover{box-shadow:0 12px 50px rgba(255,107,43,.28)}
+.feat-badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);
+  background:var(--orange);color:#fff;font-size:10px;font-weight:600;
+  padding:4px 16px;border-radius:999px;white-space:nowrap;
+  font-family:'IBM Plex Mono',monospace;letter-spacing:.08em}
+.price-feat-li{font-size:13.5px;padding:8px 0;border-bottom:1px solid var(--line);
+  display:flex;align-items:center;gap:10px}
+.price-feat-li::before{content:"→";color:var(--orange);font-family:'IBM Plex Mono',monospace;font-size:11px;flex-shrink:0}
+.price-card.featured .price-feat-li{border-color:rgba(155,163,187,.12);color:var(--warm)}
+
+/* ── STATS ── */
+.stat-num{font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;color:var(--orange);line-height:1}
+.stat-lbl{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--blue);
+  margin-top:4px;letter-spacing:.1em;text-transform:uppercase}
+
+/* ── FORM ── */
+.form-label{display:block;font-size:11px;font-weight:600;color:var(--muted);
+  margin-bottom:6px;text-transform:uppercase;letter-spacing:.08em;
+  font-family:'IBM Plex Mono',monospace}
+.form-input{width:100%;padding:11px 14px;border-radius:6px;
+  border:1px solid var(--line);background:var(--cream);color:var(--text);
+  font-size:14px;outline:none;transition:all .2s}
+.form-input:focus{border-color:var(--orange);background:var(--white);
+  box-shadow:0 0 0 3px rgba(255,107,43,.08)}
+.form-input::placeholder{color:rgba(107,107,107,.6)}
+
+/* ── CONTACT ── */
+.contact-row{display:flex;align-items:flex-start;gap:14px;padding:14px 0;border-bottom:1px solid var(--line)}
+.contact-icon{width:40px;height:40px;border-radius:8px;background:var(--orange-t);
+  border:1px solid var(--orange-b);display:flex;align-items:center;justify-content:center;
+  font-size:16px;flex-shrink:0}
+
+/* ── MODAL ── */
+.modal-bd{display:none;position:fixed;inset:0;z-index:500;
+  background:rgba(24,24,47,.88);backdrop-filter:blur(10px);
+  align-items:center;justify-content:center;padding:16px}
+.modal-bd.open{display:flex;animation:fadeIn .2s ease}
+.modal-box{width:100%;max-width:860px;background:var(--white);border-radius:10px;
+  overflow:hidden;box-shadow:var(--sh2);animation:scaleIn .25s ease;position:relative}
+.modal-x{position:absolute;top:12px;right:12px;z-index:10;width:32px;height:32px;
+  border-radius:50%;background:rgba(24,24,47,.7);border:none;color:#fff;
+  font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:background .2s}
+.modal-x:hover{background:var(--orange)}
+.modal-vid{position:relative;aspect-ratio:16/9;background:var(--navy)}
+.modal-vid video,.modal-vid iframe{position:absolute;inset:0;width:100%;height:100%;border:none}
+.modal-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:10px;background:var(--navy-m)}
+.modal-meta{padding:14px 18px;display:flex;align-items:center;
+  justify-content:space-between;gap:12px;border-top:1px solid var(--line)}
+
+/* ── FOOTER ── */
+.footer{background:var(--navy);border-top:2px solid var(--orange);
+  padding:28px 40px;display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:12px}
+.foot-link{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--blue);
+  cursor:pointer;letter-spacing:.06em;text-transform:uppercase;transition:color .2s;background:none;border:none}
+.foot-link:hover{color:var(--orange)}
+
+/* ── COMING SOON ── */
+.coming-soon{border:1.5px dashed var(--line);border-radius:10px;padding:60px 32px;
+  text-align:center;background:var(--orange-t)}
+
+/* ── GRIDS ── */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.grid-port{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+
+/* ── COMING SOON DOT ── */
+.live-dot{width:7px;height:7px;border-radius:50%;background:#4ade80;
+  box-shadow:0 0 5px #4ade80;display:inline-block;flex-shrink:0}
+
+/* ── HERO SLIDESHOW ── */
+.hero-slide{
+  position:absolute;inset:0;opacity:0;
+  transition:opacity .9s ease;
+  display:flex;align-items:center;justify-content:center;
+  background-image:linear-gradient(rgba(255,107,43,.05) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,107,43,.05) 1px,transparent 1px);
+  background-size:32px 32px;
+}
+.hero-slide.active{opacity:1}
+.hero-slide img{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;opacity:.85;transition:opacity .9s ease;
+}
+.slide-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:rgba(255,107,43,.3);border:1px solid rgba(255,107,43,.4);
+  cursor:pointer;transition:all .2s;flex-shrink:0;
+}
+.slide-dot.active{background:var(--orange);box-shadow:0 0 6px rgba(255,107,43,.5)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .container{padding:0 24px}
+  .nav{padding:0 24px}
+  .footer{padding:24px}
+  .grid-3{grid-template-columns:1fr 1fr !important}
+}
+@media(max-width:768px){
+  .container{padding:0 18px}
+  .nav{padding:0 18px}
+  .nav-links,.nav-cta{display:none !important}
+  .hamburger{display:flex !important}
+  .hero{padding:calc(62px + 40px) 0 56px}
+  .hero-inner{grid-template-columns:1fr !important;gap:28px}
+  .hero-visual{display:block !important;width:100% !important;max-width:100% !important;margin:0 !important}
+  .hero-visual>div{width:100% !important;display:block}
+  #slideshow{aspect-ratio:4/5 !important;width:100% !important;max-height:none !important}
+  
+  .hero-float-badge{display:none !important}
+  .hero-corner{display:none !important}
+  .grid-stats{max-width:100% !important;width:100% !important}
+  .grid-2,.grid-3,.grid-pricing{grid-template-columns:1fr !important}
+  .hero-cta{flex-direction:column;align-items:flex-start}
+  .hero-cta .btn{width:100%}
+  .contact-grid{grid-template-columns:1fr !important}
+  .form-row{grid-template-columns:1fr !important}
+  .process-grid{grid-template-columns:1fr 1fr !important}
+  .footer{flex-direction:column;align-items:flex-start;gap:16px;padding:24px 18px}
+  .footer-links{flex-wrap:wrap;gap:12px}
+  .nav-logo .sub{display:none}
+}
+@media(max-width:480px){
+  .grid-stats{grid-template-columns:repeat(3,1fr) !important}
+  .cat-tab{padding:6px 12px;font-size:10px}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══════════════════════════════════════════════════════════════ -->
+<nav class="nav">
+  <button class="nav-logo" onclick="showPage('home')">
+    Duketus<span class="dot">.</span>Productions
+    <span class="sub">AI Content Services</span>
+  </button>
+  <ul class="nav-links" id="nav-links">
+    <li><button class="nav-btn active" data-page="home" onclick="showPage('home')">Home</button></li>
+    <li><button class="nav-btn" data-page="services" onclick="showPage('services')">Services</button></li>
+    <li><button class="nav-btn" data-page="portfolio" onclick="showPage('portfolio')">Portfolio</button></li>
+    <li><button class="nav-btn" data-page="pricing" onclick="showPage('pricing')">Preise</button></li>
+    <li><button class="nav-btn" data-page="kontakt" onclick="showPage('kontakt')">Kontakt</button></li>
+  </ul>
+  <button class="btn btn-primary btn-sm nav-cta" onclick="showPage('kontakt')">Anfragen</button>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ═══ MOBILE MENU ════════════════════════════════════════════════════════ -->
+<div class="mobile-menu" id="mobile-menu">
+  <button class="mob-btn active" data-page="home" onclick="showPage('home')">Home</button>
+  <button class="mob-btn" data-page="services" onclick="showPage('services')">Services</button>
+  <button class="mob-btn" data-page="portfolio" onclick="showPage('portfolio')">Portfolio</button>
+  <button class="mob-btn" data-page="pricing" onclick="showPage('pricing')">Preise</button>
+  <button class="mob-btn" data-page="kontakt" onclick="showPage('kontakt')">Kontakt</button>
+  <button class="btn btn-primary" style="margin-top:16px" onclick="showPage('kontakt')">Jetzt anfragen</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     PAGE: HOME
+═══════════════════════════════════════════════════════════════════════════ -->
+<div id="page-home" class="page active">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-grid"></div>
+    <div class="hero-corner tl"></div>
+    <div class="hero-corner br"></div>
+    <div class="hero-glow" style="top:-20%;right:-10%"></div>
+    <div class="hero-glow" style="bottom:-30%;left:-5%;width:400px;height:400px"></div>
+
+    <div class="container" style="position:relative;z-index:1">
+      <div class="hero-inner">
+
+        <!-- LEFT: Text column -->
+        <div>
+          <!-- Mono label -->
+          <div class="au" style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--orange);letter-spacing:.18em;text-transform:uppercase">Studio · 01</span>
+            <span style="width:32px;height:1px;background:rgba(255,107,43,.4)"></span>
+            <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--blue);letter-spacing:.12em">AI Content Services</span>
+          </div>
+
+          <h1 class="au d1" style="font-size:clamp(2.4rem,5vw,4rem);font-weight:800;color:var(--warm);line-height:1.05;margin-bottom:22px">
+            Dein Produkt.<br>
+            <span style="color:var(--orange)">Professionell</span><br>
+            <span style="font-weight:300;font-style:italic;color:var(--blue)">in Szene gesetzt.</span>
+          </h1>
+
+          <p class="au d2" style="font-size:15px;font-weight:300;color:var(--warm);max-width:420px;line-height:1.85;margin-bottom:36px">
+            KI-generierte Produktbilder &amp; Video-Ads für Social Media, TV und Web — ohne Fotostudio, ohne langen Vorlauf.
+          </p>
+
+          <div class="au d3 hero-cta" style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:48px">
+            <button class="btn btn-primary btn-lg" onclick="showPage('kontakt')">Projekt anfragen</button>
+            <button class="btn btn-outline btn-lg" onclick="showPage('portfolio')">Portfolio →</button>
+          </div>
+
+          <!-- Stats / Value Props -->
+          <div class="au d4 grid-stats" style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,107,43,.1);width:100%;max-width:400px;border-radius:8px;overflow:hidden">
+            <div style="padding:18px 10px;background:var(--navy-m);text-align:center">
+              <div class="stat-num" style="font-size:clamp(1rem,3.5vw,1.6rem);line-height:1.15">bis<br>−90%</div>
+              <div class="stat-lbl">Studiokosten</div>
+            </div>
+            <div style="padding:18px 10px;background:var(--navy-m);text-align:center;border-left:1px solid rgba(255,107,43,.1);border-right:1px solid rgba(255,107,43,.1)">
+              <div class="stat-num" style="font-size:clamp(1rem,3.5vw,1.6rem);line-height:1.15">ab<br>48h</div>
+              <div class="stat-lbl">Lieferzeit</div>
+            </div>
+            <div style="padding:18px 10px;background:var(--navy-m);text-align:center">
+              <div class="stat-num" style="font-size:clamp(1rem,3.5vw,1.6rem);line-height:1.15">Kein<br>Studio</div>
+              <div class="stat-lbl">nötig</div>
+            </div>
+          </div>
+
+          <!-- Tags -->
+          <div class="au d5" style="display:flex;gap:8px;margin-top:20px;flex-wrap:wrap">
+            <span class="tag tag-dark">Social Media</span>
+            <span class="tag tag-dark">TV Spot</span>
+            <span class="tag tag-dark">E-Commerce</span>
+            <span class="tag tag-dark">Website Hero</span>
+          </div>
+        </div>
+
+        <!-- RIGHT: Slideshow visual -->
+        <div class="hero-visual" style="position:relative">
+
+          <div style="position:relative;border-radius:12px;overflow:hidden;border:1px solid rgba(255,107,43,.2);box-shadow:0 20px 60px rgba(0,0,0,.4)">
+
+            <!-- Slideshow frame -->
+            <div class="hero-visual-frame" id="slideshow" style="position:relative;aspect-ratio:9/16;overflow:hidden;background:#0f0820">
+
+              <!-- ── SLIDE 1: Fashion Hypermotion ── -->
+              <div class="hero-slide active" style="background:linear-gradient(145deg,#1e0835,#0a0520,#18182f)">
+                <!-- ▼▼▼ Bild-URL hier eintragen: src="https://..." ▼▼▼ -->
+                <img src="" alt="Oversized Hoodie Hypermotion" onerror="this.style.display='none'">
+                <div style="position:relative;z-index:1;text-align:center;padding:24px">
+                  <div style="width:80px;height:110px;margin:0 auto 16px;border:1px solid rgba(255,107,43,.25);border-radius:6px;display:flex;align-items:center;justify-content:center;background:rgba(255,107,43,.04)">
+                    <div class="corner tl" style="top:0;left:0"></div><div class="corner br" style="bottom:0;right:0"></div>
+                    <span style="font-size:2rem;opacity:.25">◼</span>
+                  </div>
+                  <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:rgba(255,107,43,.5);letter-spacing:.2em;text-transform:uppercase">Fashion · Hypermotion</div>
+                </div>
+                <div style="position:absolute;top:12px;left:12px;width:14px;height:14px;border-top:1px solid rgba(255,107,43,.4);border-left:1px solid rgba(255,107,43,.4)"></div>
+                <div style="position:absolute;bottom:12px;right:12px;width:14px;height:14px;border-bottom:1px solid rgba(255,107,43,.4);border-right:1px solid rgba(255,107,43,.4)"></div>
+              </div>
+
+              <!-- ── SLIDE 2: Fashion Editorial ── -->
+              <div class="hero-slide" style="background:linear-gradient(145deg,#14062a,#0e0620,#18182f)">
+                <img src="" alt="Oversized Hoodie Editorial" onerror="this.style.display='none'">
+                <div style="position:relative;z-index:1;text-align:center;padding:24px">
+                  <div style="width:80px;height:110px;margin:0 auto 16px;border:1px solid rgba(255,107,43,.25);border-radius:6px;display:flex;align-items:center;justify-content:center;background:rgba(255,107,43,.04)">
+                    <div class="corner tl" style="top:0;left:0"></div><div class="corner br" style="bottom:0;right:0"></div>
+                    <span style="font-size:2rem;opacity:.25">◼</span>
+                  </div>
+                  <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:rgba(255,107,43,.5);letter-spacing:.2em;text-transform:uppercase">Fashion · Editorial</div>
+                </div>
+                <div style="position:absolute;top:12px;left:12px;width:14px;height:14px;border-top:1px solid rgba(255,107,43,.4);border-left:1px solid rgba(255,107,43,.4)"></div>
+                <div style="position:absolute;bottom:12px;right:12px;width:14px;height:14px;border-bottom:1px solid rgba(255,107,43,.4);border-right:1px solid rgba(255,107,43,.4)"></div>
+              </div>
+
+              <!-- ── SLIDE 3: Fashion UGC ── -->
+              <div class="hero-slide" style="background:linear-gradient(145deg,#1a0f2e,#0f0820,#18182f)">
+                <img src="" alt="Oversized Hoodie UGC" onerror="this.style.display='none'">
+                <div style="position:relative;z-index:1;text-align:center;padding:24px">
+                  <div style="width:80px;height:110px;margin:0 auto 16px;border:1px solid rgba(255,107,43,.25);border-radius:6px;display:flex;align-items:center;justify-content:center;background:rgba(255,107,43,.04)">
+                    <div class="corner tl" style="top:0;left:0"></div><div class="corner br" style="bottom:0;right:0"></div>
+                    <span style="font-size:2rem;opacity:.25">◼</span>
+                  </div>
+                  <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:rgba(255,107,43,.5);letter-spacing:.2em;text-transform:uppercase">Fashion · UGC</div>
+                </div>
+                <div style="position:absolute;top:12px;left:12px;width:14px;height:14px;border-top:1px solid rgba(255,107,43,.4);border-left:1px solid rgba(255,107,43,.4)"></div>
+                <div style="position:absolute;bottom:12px;right:12px;width:14px;height:14px;border-bottom:1px solid rgba(255,107,43,.4);border-right:1px solid rgba(255,107,43,.4)"></div>
+              </div>
+
+              <!-- ── SLIDE 4: Lifestyle TV Spot ── -->
+              <div class="hero-slide" style="background:linear-gradient(145deg,#0f0820,#160d2a,#18182f)">
+                <img src="" alt="Creeo Noir TV Spot" onerror="this.style.display='none'">
+                <div style="position:relative;z-index:1;text-align:center;padding:24px">
+                  <div style="width:80px;height:110px;margin:0 auto 16px;border:1px solid rgba(255,107,43,.25);border-radius:6px;display:flex;align-items:center;justify-content:center;background:rgba(255,107,43,.04)">
+                    <div class="corner tl" style="top:0;left:0"></div><div class="corner br" style="bottom:0;right:0"></div>
+                    <span style="font-size:2rem;opacity:.25">◼</span>
+                  </div>
+                  <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:rgba(255,107,43,.5);letter-spacing:.2em;text-transform:uppercase">Lifestyle · TV Spot</div>
+                </div>
+                <div style="position:absolute;top:12px;left:12px;width:14px;height:14px;border-top:1px solid rgba(255,107,43,.4);border-left:1px solid rgba(255,107,43,.4)"></div>
+                <div style="position:absolute;bottom:12px;right:12px;width:14px;height:14px;border-bottom:1px solid rgba(255,107,43,.4);border-right:1px solid rgba(255,107,43,.4)"></div>
+              </div>
+
+              <!-- ── SLIDE 5: Lifestyle Hypermotion ── -->
+              <div class="hero-slide" style="background:linear-gradient(145deg,#100820,#1c0d38,#18182f)">
+                <img src="" alt="Creeo Noir Hypermotion" onerror="this.style.display='none'">
+                <div style="position:relative;z-index:1;text-align:center;padding:24px">
+                  <div style="width:80px;height:110px;margin:0 auto 16px;border:1px solid rgba(255,107,43,.25);border-radius:6px;display:flex;align-items:center;justify-content:center;background:rgba(255,107,43,.04)">
+                    <div class="corner tl" style="top:0;left:0"></div><div class="corner br" style="bottom:0;right:0"></div>
+                    <span style="font-size:2rem;opacity:.25">◼</span>
+                  </div>
+                  <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:rgba(255,107,43,.5);letter-spacing:.2em;text-transform:uppercase">Lifestyle · Hypermotion</div>
+                </div>
+                <div style="position:absolute;top:12px;left:12px;width:14px;height:14px;border-top:1px solid rgba(255,107,43,.4);border-left:1px solid rgba(255,107,43,.4)"></div>
+                <div style="position:absolute;bottom:12px;right:12px;width:14px;height:14px;border-bottom:1px solid rgba(255,107,43,.4);border-right:1px solid rgba(255,107,43,.4)"></div>
+              </div>
+
+              <!-- ── SLIDE 6: Lifestyle UGC ── -->
+              <div class="hero-slide" style="background:linear-gradient(145deg,#130920,#180d30,#18182f)">
+                <img src="" alt="Creeo Noir UGC" onerror="this.style.display='none'">
+                <div style="position:relative;z-index:1;text-align:center;padding:24px">
+                  <div style="width:80px;height:110px;margin:0 auto 16px;border:1px solid rgba(255,107,43,.25);border-radius:6px;display:flex;align-items:center;justify-content:center;background:rgba(255,107,43,.04)">
+                    <div class="corner tl" style="top:0;left:0"></div><div class="corner br" style="bottom:0;right:0"></div>
+                    <span style="font-size:2rem;opacity:.25">◼</span>
+                  </div>
+                  <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:rgba(255,107,43,.5);letter-spacing:.2em;text-transform:uppercase">Lifestyle · UGC</div>
+                </div>
+                <div style="position:absolute;top:12px;left:12px;width:14px;height:14px;border-top:1px solid rgba(255,107,43,.4);border-left:1px solid rgba(255,107,43,.4)"></div>
+                <div style="position:absolute;bottom:12px;right:12px;width:14px;height:14px;border-bottom:1px solid rgba(255,107,43,.4);border-right:1px solid rgba(255,107,43,.4)"></div>
+              </div>
+
+            </div><!-- end slideshow -->
+
+            <!-- Bottom bar -->
+            <div style="padding:12px 16px;background:rgba(24,24,47,.97);border-top:1px solid rgba(255,107,43,.15);display:flex;align-items:center;justify-content:space-between;gap:12px">
+              <div>
+                <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:rgba(255,107,43,.5);letter-spacing:.15em;text-transform:uppercase">KI Produktcontent</div>
+                <div id="slide-sublabel" style="font-size:12px;font-weight:600;color:var(--warm);margin-top:2px;transition:opacity .4s">Fashion · Lifestyle · Beauty</div>
+              </div>
+              <!-- Dots -->
+              <div id="slide-dots" style="display:flex;gap:5px;align-items:center"></div>
+            </div>
+          </div>
+
+          <!-- Floating badges — hidden on mobile -->
+          <div class="hero-float-badge" style="position:absolute;top:-16px;right:-16px;background:var(--navy-m);border:1px solid rgba(255,107,43,.2);border-radius:8px;padding:10px 14px;box-shadow:var(--sh1)">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--orange);letter-spacing:.12em">▶ TV SPOT</div>
+          </div>
+          <div class="hero-float-badge" style="position:absolute;bottom:-16px;left:-16px;background:var(--navy-m);border:1px solid rgba(255,107,43,.2);border-radius:8px;padding:10px 14px;box-shadow:var(--sh1)">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--orange);letter-spacing:.12em">◼ META ADS</div>
+          </div>
+        </div>
+
+      </div><!-- end hero-inner -->
+    </div>
+  </section>
+
+  <!-- PILLARS -->
+  <section style="padding:80px 0;background:var(--cream)">
+    <div class="container">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px">
+
+        <!-- Card 01 -->
+        <div style="border-radius:10px;overflow:hidden;border:1px solid rgba(255,107,43,.2);box-shadow:0 8px 40px rgba(0,0,0,.3);transition:transform .25s,box-shadow .25s"
+          onmouseenter="this.style.transform='translateY(-5px)';this.style.boxShadow='0 16px 50px rgba(0,0,0,.4)'" onmouseleave="this.style.transform='none';this.style.boxShadow='0 8px 40px rgba(0,0,0,.3)'">
+          <!-- Main face -->
+          <div style="background-color:#1a0f2e;background-image:linear-gradient(rgba(255,107,43,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,107,43,.06) 1px,transparent 1px);background-size:32px 32px;padding:28px 20px 24px;position:relative;min-height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center">
+            <!-- Corner brackets -->
+            <div style="position:absolute;top:12px;left:12px;width:16px;height:16px;border-top:1px solid rgba(255,107,43,.45);border-left:1px solid rgba(255,107,43,.45)"></div>
+            <div style="position:absolute;bottom:12px;right:12px;width:16px;height:16px;border-bottom:1px solid rgba(255,107,43,.45);border-right:1px solid rgba(255,107,43,.45)"></div>
+            <!-- Floating badge top-right -->
+            <div style="position:absolute;top:10px;right:10px;background:rgba(255,107,43,.15);border:1px solid rgba(255,107,43,.4);border-radius:4px;padding:3px 8px;font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--orange-l);letter-spacing:.1em">01</div>
+            <!-- Content -->
+            <div style="font-size:2rem;margin-bottom:14px;filter:drop-shadow(0 0 8px rgba(255,107,43,.3))">⚡</div>
+            <div style="font-weight:700;font-size:14px;color:#fff;margin-bottom:8px">Schnell</div>
+            <p style="font-size:12px;color:rgba(155,163,187,.8);line-height:1.65;max-width:160px">Erste Ergebnisse in 48h — kein Produktionsvorlauf.</p>
+          </div>
+          <!-- Bottom bar -->
+          <div style="padding:10px 14px;background:rgba(24,24,47,.95);border-top:1px solid rgba(255,107,43,.15);display:flex;align-items:center;justify-content:space-between">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(255,107,43,.6);letter-spacing:.15em;text-transform:uppercase">LIEFERZEIT</div>
+            <span style="background:rgba(255,107,43,.15);color:var(--orange);font-family:'IBM Plex Mono',monospace;font-size:9px;padding:3px 8px;border-radius:4px;border:1px solid rgba(255,107,43,.3)">48h</span>
+          </div>
+        </div>
+
+        <!-- Card 02 -->
+        <div style="border-radius:10px;overflow:hidden;border:1px solid rgba(255,107,43,.2);box-shadow:0 8px 40px rgba(0,0,0,.3);transition:transform .25s,box-shadow .25s"
+          onmouseenter="this.style.transform='translateY(-5px)';this.style.boxShadow='0 16px 50px rgba(0,0,0,.4)'" onmouseleave="this.style.transform='none';this.style.boxShadow='0 8px 40px rgba(0,0,0,.3)'">
+          <div style="background-color:#1a0f2e;background-image:linear-gradient(rgba(255,107,43,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,107,43,.06) 1px,transparent 1px);background-size:32px 32px;padding:28px 20px 24px;position:relative;min-height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center">
+            <div style="position:absolute;top:12px;left:12px;width:16px;height:16px;border-top:1px solid rgba(255,107,43,.45);border-left:1px solid rgba(255,107,43,.45)"></div>
+            <div style="position:absolute;bottom:12px;right:12px;width:16px;height:16px;border-bottom:1px solid rgba(255,107,43,.45);border-right:1px solid rgba(255,107,43,.45)"></div>
+            <div style="position:absolute;top:10px;right:10px;background:rgba(255,107,43,.15);border:1px solid rgba(255,107,43,.4);border-radius:4px;padding:3px 8px;font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--orange-l);letter-spacing:.1em">02</div>
+            <div style="font-size:2rem;margin-bottom:14px;filter:drop-shadow(0 0 8px rgba(255,107,43,.3))">🎯</div>
+            <div style="font-weight:700;font-size:14px;color:#fff;margin-bottom:8px">Präzise</div>
+            <p style="font-size:12px;color:rgba(155,163,187,.8);line-height:1.65;max-width:160px">Jedes Asset individuell. Für dein Produkt, deine Zielgruppe.</p>
+          </div>
+          <div style="padding:10px 14px;background:rgba(24,24,47,.95);border-top:1px solid rgba(255,107,43,.15);display:flex;align-items:center;justify-content:space-between">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(255,107,43,.6);letter-spacing:.15em;text-transform:uppercase">QUALITÄT</div>
+            <span style="background:rgba(255,107,43,.15);color:var(--orange);font-family:'IBM Plex Mono',monospace;font-size:9px;padding:3px 8px;border-radius:4px;border:1px solid rgba(255,107,43,.3)">KI</span>
+          </div>
+        </div>
+
+        <!-- Card 03 -->
+        <div style="border-radius:10px;overflow:hidden;border:1px solid rgba(255,107,43,.2);box-shadow:0 8px 40px rgba(0,0,0,.3);transition:transform .25s,box-shadow .25s"
+          onmouseenter="this.style.transform='translateY(-5px)';this.style.boxShadow='0 16px 50px rgba(0,0,0,.4)'" onmouseleave="this.style.transform='none';this.style.boxShadow='0 8px 40px rgba(0,0,0,.3)'">
+          <div style="background-color:#1a0f2e;background-image:linear-gradient(rgba(255,107,43,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,107,43,.06) 1px,transparent 1px);background-size:32px 32px;padding:28px 20px 24px;position:relative;min-height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center">
+            <div style="position:absolute;top:12px;left:12px;width:16px;height:16px;border-top:1px solid rgba(255,107,43,.45);border-left:1px solid rgba(255,107,43,.45)"></div>
+            <div style="position:absolute;bottom:12px;right:12px;width:16px;height:16px;border-bottom:1px solid rgba(255,107,43,.45);border-right:1px solid rgba(255,107,43,.45)"></div>
+            <div style="position:absolute;top:10px;right:10px;background:rgba(255,107,43,.15);border:1px solid rgba(255,107,43,.4);border-radius:4px;padding:3px 8px;font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--orange-l);letter-spacing:.1em">03</div>
+            <div style="font-size:2rem;margin-bottom:14px;filter:drop-shadow(0 0 8px rgba(255,107,43,.3))">📈</div>
+            <div style="font-weight:700;font-size:14px;color:#fff;margin-bottom:8px">Skalierbar</div>
+            <p style="font-size:12px;color:rgba(155,163,187,.8);line-height:1.65;max-width:160px">5 oder 500 Assets — Produktion wächst mit deinem Bedarf.</p>
+          </div>
+          <div style="padding:10px 14px;background:rgba(24,24,47,.95);border-top:1px solid rgba(255,107,43,.15);display:flex;align-items:center;justify-content:space-between">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(255,107,43,.6);letter-spacing:.15em;text-transform:uppercase">VOLUMEN</div>
+            <span style="background:rgba(255,107,43,.15);color:var(--orange);font-family:'IBM Plex Mono',monospace;font-size:9px;padding:3px 8px;border-radius:4px;border:1px solid rgba(255,107,43,.3)">∞</span>
+          </div>
+        </div>
+
+        <!-- Card 04 -->
+        <div style="border-radius:10px;overflow:hidden;border:1px solid rgba(255,107,43,.2);box-shadow:0 8px 40px rgba(0,0,0,.3);transition:transform .25s,box-shadow .25s"
+          onmouseenter="this.style.transform='translateY(-5px)';this.style.boxShadow='0 16px 50px rgba(0,0,0,.4)'" onmouseleave="this.style.transform='none';this.style.boxShadow='0 8px 40px rgba(0,0,0,.3)'">
+          <div style="background-color:#1a0f2e;background-image:linear-gradient(rgba(255,107,43,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,107,43,.06) 1px,transparent 1px);background-size:32px 32px;padding:28px 20px 24px;position:relative;min-height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center">
+            <div style="position:absolute;top:12px;left:12px;width:16px;height:16px;border-top:1px solid rgba(255,107,43,.45);border-left:1px solid rgba(255,107,43,.45)"></div>
+            <div style="position:absolute;bottom:12px;right:12px;width:16px;height:16px;border-bottom:1px solid rgba(255,107,43,.45);border-right:1px solid rgba(255,107,43,.45)"></div>
+            <div style="position:absolute;top:10px;right:10px;background:rgba(255,107,43,.15);border:1px solid rgba(255,107,43,.4);border-radius:4px;padding:3px 8px;font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--orange-l);letter-spacing:.1em">04</div>
+            <div style="font-size:2rem;margin-bottom:14px;filter:drop-shadow(0 0 8px rgba(255,107,43,.3))">✅</div>
+            <div style="font-weight:700;font-size:14px;color:#fff;margin-bottom:8px">Einsatzbereit</div>
+            <p style="font-size:12px;color:rgba(155,163,187,.8);line-height:1.65;max-width:160px">Alle Formate direkt optimiert für Social, TV und Web.</p>
+          </div>
+          <div style="padding:10px 14px;background:rgba(24,24,47,.95);border-top:1px solid rgba(255,107,43,.15);display:flex;align-items:center;justify-content:space-between">
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(255,107,43,.6);letter-spacing:.15em;text-transform:uppercase">FORMATE</div>
+            <span style="background:rgba(255,107,43,.15);color:var(--orange);font-family:'IBM Plex Mono',monospace;font-size:9px;padding:3px 8px;border-radius:4px;border:1px solid rgba(255,107,43,.3)">ALL</span>
+          </div>
+        </div>
+
+      </div>
+      <div style="text-align:center;margin-top:44px">
+        <button class="btn btn-primary" onclick="showPage('services')">Alle Leistungen →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- BRANCHEN -->
+  <section style="padding:72px 0;background:var(--cream)">
+    <div class="container">
+      <div style="text-align:center;margin-bottom:40px">
+        <p class="eyebrow" style="justify-content:center">Für wen</p>
+        <h2 style="font-size:clamp(1.5rem,3vw,2rem);font-weight:800;color:var(--text);margin-bottom:10px">
+          Deine Branche. <span style="color:var(--orange)">Dein Content.</span>
+        </h2>
+        <p style="font-size:14px;color:var(--muted);max-width:420px;margin:0 auto;line-height:1.7">
+          KI-Produktcontent für Brands jeder Größe — vom D2C-Startup bis zur etablierten Marke.
+        </p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px">
+
+        <!-- Fashion -->
+        <div style="border-radius:8px;overflow:hidden;border:1px solid var(--line);transition:all .25s"
+          onmouseenter="this.style.borderColor='var(--orange-b)';this.style.transform='translateY(-3px)'"
+          onmouseleave="this.style.borderColor='var(--line)';this.style.transform='none'">
+          <div style="background-color:#1a0f2e;background-image:linear-gradient(rgba(255,107,43,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(255,107,43,.07) 1px,transparent 1px);background-size:28px 28px;padding:20px;position:relative">
+            <div style="position:absolute;top:10px;left:10px;width:12px;height:12px;border-top:1px solid rgba(255,107,43,.4);border-left:1px solid rgba(255,107,43,.4)"></div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(255,107,43,.5);letter-spacing:.18em;text-transform:uppercase;margin-bottom:6px">01</div>
+            <div style="font-size:1.4rem;margin-bottom:8px">👗</div>
+            <div style="font-weight:700;font-size:14px;color:#fff">Fashion</div>
+          </div>
+          <div style="background:var(--white);padding:14px 16px">
+            <div style="display:flex;flex-wrap:wrap;gap:5px">
+              <span class="tag" style="font-size:9px">Streetwear</span>
+              <span class="tag" style="font-size:9px">Sportswear</span>
+              <span class="tag" style="font-size:9px">Lookbook</span>
+              <span class="tag" style="font-size:9px">Luxury</span>
+              <span class="tag" style="font-size:9px">Accessories</span>
+              <span class="tag" style="font-size:9px">Workwear</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lifestyle -->
+        <div style="border-radius:8px;overflow:hidden;border:1px solid var(--line);transition:all .25s"
+          onmouseenter="this.style.borderColor='var(--orange-b)';this.style.transform='translateY(-3px)'"
+          onmouseleave="this.style.borderColor='var(--line)';this.style.transform='none'">
+          <div style="background-color:#100820;background-image:linear-gradient(rgba(255,107,43,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(255,107,43,.07) 1px,transparent 1px);background-size:28px 28px;padding:20px;position:relative">
+            <div style="position:absolute;top:10px;left:10px;width:12px;height:12px;border-top:1px solid rgba(255,107,43,.4);border-left:1px solid rgba(255,107,43,.4)"></div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(255,107,43,.5);letter-spacing:.18em;text-transform:uppercase;margin-bottom:6px">02</div>
+            <div style="font-size:1.4rem;margin-bottom:8px">✨</div>
+            <div style="font-weight:700;font-size:14px;color:#fff">Lifestyle</div>
+          </div>
+          <div style="background:var(--white);padding:14px 16px">
+            <div style="display:flex;flex-wrap:wrap;gap:5px">
+              <span class="tag" style="font-size:9px">Parfum</span>
+              <span class="tag" style="font-size:9px">Kerzen</span>
+              <span class="tag" style="font-size:9px">Home Decor</span>
+              <span class="tag" style="font-size:9px">Wellness</span>
+              <span class="tag" style="font-size:9px">Schmuck</span>
+              <span class="tag" style="font-size:9px">Interior</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Beauty -->
+        <div style="border-radius:8px;overflow:hidden;border:1px solid var(--line);transition:all .25s"
+          onmouseenter="this.style.borderColor='var(--orange-b)';this.style.transform='translateY(-3px)'"
+          onmouseleave="this.style.borderColor='var(--line)';this.style.transform='none'">
+          <div style="background-color:#0d0820;background-image:linear-gradient(rgba(255,107,43,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(255,107,43,.07) 1px,transparent 1px);background-size:28px 28px;padding:20px;position:relative">
+            <div style="position:absolute;top:10px;left:10px;width:12px;height:12px;border-top:1px solid rgba(255,107,43,.4);border-left:1px solid rgba(255,107,43,.4)"></div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(255,107,43,.5);letter-spacing:.18em;text-transform:uppercase;margin-bottom:6px">03</div>
+            <div style="font-size:1.4rem;margin-bottom:8px">💄</div>
+            <div style="font-weight:700;font-size:14px;color:#fff">Beauty</div>
+          </div>
+          <div style="background:var(--white);padding:14px 16px">
+            <div style="display:flex;flex-wrap:wrap;gap:5px">
+              <span class="tag" style="font-size:9px">Skincare</span>
+              <span class="tag" style="font-size:9px">Kosmetik</span>
+              <span class="tag" style="font-size:9px">Hair Care</span>
+              <span class="tag" style="font-size:9px">Make-up</span>
+              <span class="tag" style="font-size:9px">Supplements</span>
+              <span class="tag" style="font-size:9px">Nails</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Food -->
+        <div style="border-radius:8px;overflow:hidden;border:1px solid var(--line);transition:all .25s"
+          onmouseenter="this.style.borderColor='var(--orange-b)';this.style.transform='translateY(-3px)'"
+          onmouseleave="this.style.borderColor='var(--line)';this.style.transform='none'">
+          <div style="background-color:#130a06;background-image:linear-gradient(rgba(255,107,43,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(255,107,43,.07) 1px,transparent 1px);background-size:28px 28px;padding:20px;position:relative">
+            <div style="position:absolute;top:10px;left:10px;width:12px;height:12px;border-top:1px solid rgba(255,107,43,.4);border-left:1px solid rgba(255,107,43,.4)"></div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(255,107,43,.5);letter-spacing:.18em;text-transform:uppercase;margin-bottom:6px">04</div>
+            <div style="font-size:1.4rem;margin-bottom:8px">🍽️</div>
+            <div style="font-weight:700;font-size:14px;color:#fff">Food</div>
+          </div>
+          <div style="background:var(--white);padding:14px 16px">
+            <div style="display:flex;flex-wrap:wrap;gap:5px">
+              <span class="tag" style="font-size:9px">Restaurants</span>
+              <span class="tag" style="font-size:9px">D2C Snacks</span>
+              <span class="tag" style="font-size:9px">Getränke</span>
+              <span class="tag" style="font-size:9px">Catering</span>
+              <span class="tag" style="font-size:9px">Bio-Brands</span>
+              <span class="tag" style="font-size:9px">Supplements</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div style="text-align:center;margin-top:32px">
+        <p style="font-size:14px;color:var(--muted);margin-bottom:14px">Du erkennst deine Nische? Dann lass uns reden.</p>
+        <button class="btn btn-primary" onclick="showPage('kontakt')">Kostenloses Gespräch anfragen</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     PAGE: SERVICES
+═══════════════════════════════════════════════════════════════════════════ -->
+<div id="page-services" class="page" style="padding-top:62px">
+  <div class="page-banner">
+    <div class="hero-grid"></div>
+    <div class="container" style="position:relative;z-index:1">
+      <p class="eyebrow">02 / Leistungen</p>
+      <h2 style="font-size:clamp(1.7rem,3.5vw,2.4rem);font-weight:800;color:var(--warm);line-height:1.12;margin-bottom:12px">
+        KI-Produktcontent <span style="color:var(--orange)">aus einer Hand.</span>
+      </h2>
+      <p style="font-size:14.5px;color:var(--blue);max-width:500px;line-height:1.8">
+        Professionelle Bild- und Videoproduktion — skalierbar, schnell, ohne Studio.
+      </p>
+    </div>
+  </div>
+
+  <div class="container" style="padding-top:60px;padding-bottom:60px">
+    <div class="grid-2" style="margin-bottom:48px">
+      <!-- Service 01 -->
+      <div class="service-card">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--orange-b);font-weight:500">01</span>
+          <div style="width:1px;height:20px;background:var(--line)"></div>
+          <span style="font-size:18px">◼</span>
+        </div>
+        <h3 style="font-size:19px;font-weight:700;margin-bottom:4px">KI Produktbilder</h3>
+        <p style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--orange);letter-spacing:.1em;margin-bottom:16px">Product &amp; Model Photography</p>
+        <p style="font-size:13.5px;color:var(--muted);line-height:1.75;margin-bottom:22px">
+          Hochwertige Produktbilder ohne Fotostudio. Von Freistellern über Model Shots bis zum cineastischen Hero Image — KI-generiert, sofort einsatzbereit.
+        </p>
+        <div class="feat-li">Produkt-Freisteller &amp; Hero Images</div>
+        <div class="feat-li">KI-Model &amp; Lookbook Shots</div>
+        <div class="feat-li">Social Media (1:1 · 4:5 · 16:9)</div>
+        <div class="feat-li">E-Commerce &amp; Website optimiert</div>
+        <div class="feat-li" style="border:none">Schnelle Lieferung, unbegrenzt skalierbar</div>
+      </div>
+
+      <!-- Service 02 -->
+      <div class="service-card">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--orange-b);font-weight:500">02</span>
+          <div style="width:1px;height:20px;background:var(--line)"></div>
+          <span style="font-size:18px">▶</span>
+        </div>
+        <h3 style="font-size:19px;font-weight:700;margin-bottom:4px">KI Product Ads</h3>
+        <p style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--orange);letter-spacing:.1em;margin-bottom:16px">Social · TV · Web</p>
+        <p style="font-size:13.5px;color:var(--muted);line-height:1.75;margin-bottom:22px">
+          KI-produzierte Video-Ads für jeden Kanal. Ob Meta-Reel, TikTok-Spot oder TV-Commercial — cinematic, UGC oder Editorial: professionell und skalierbar.
+        </p>
+        <div class="feat-li">Social Ads (Meta · TikTok · YouTube)</div>
+        <div class="feat-li">TV Spots &amp; Broadcast-Format</div>
+        <div class="feat-li">Website Hero Videos</div>
+        <div class="feat-li">UGC-Style &amp; Hypermotion</div>
+        <div class="feat-li" style="border:none">Editorial &amp; Cinematic Cuts</div>
+      </div>
+    </div>
+
+    <!-- Process -->
+    <div class="process-box">
+      <div class="hero-grid"></div>
+      <div class="corner tl"></div><div class="corner br"></div>
+      <div style="position:relative;z-index:1">
+        <p class="eyebrow" style="margin-bottom:16px">Ablauf</p>
+        <div class="process-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:24px">
+          <div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:22px;color:var(--orange);opacity:.45;line-height:1;margin-bottom:10px">01</div>
+            <div style="font-weight:700;color:var(--warm);margin-bottom:6px;font-size:15px">Briefing</div>
+            <p style="font-size:12.5px;color:var(--blue);line-height:1.65">Du beschreibst Produkt &amp; Zielgruppe.</p>
+          </div>
+          <div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:22px;color:var(--orange);opacity:.45;line-height:1;margin-bottom:10px">02</div>
+            <div style="font-weight:700;color:var(--warm);margin-bottom:6px;font-size:15px">Konzept</div>
+            <p style="font-size:12.5px;color:var(--blue);line-height:1.65">Wir entwickeln Creative-Konzepte.</p>
+          </div>
+          <div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:22px;color:var(--orange);opacity:.45;line-height:1;margin-bottom:10px">03</div>
+            <div style="font-weight:700;color:var(--warm);margin-bottom:6px;font-size:15px">Produktion</div>
+            <p style="font-size:12.5px;color:var(--blue);line-height:1.65">KI-Produktion aller vereinbarten Assets.</p>
+          </div>
+          <div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:22px;color:var(--orange);opacity:.45;line-height:1;margin-bottom:10px">04</div>
+            <div style="font-weight:700;color:var(--warm);margin-bottom:6px;font-size:15px">Lieferung</div>
+            <p style="font-size:12.5px;color:var(--blue);line-height:1.65">Fertige Dateien, ready für alle Kanäle.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:40px">
+      <button class="btn btn-primary btn-lg" onclick="showPage('kontakt')">Kostenloses Gespräch vereinbaren</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     PAGE: PORTFOLIO
+═══════════════════════════════════════════════════════════════════════════ -->
+<div id="page-portfolio" class="page" style="padding-top:62px">
+  <div class="page-banner">
+    <div class="hero-grid"></div>
+    <div class="container" style="position:relative;z-index:1">
+      <p class="eyebrow">03 / Portfolio</p>
+      <h2 style="font-size:clamp(1.7rem,3.5vw,2.4rem);font-weight:800;color:var(--warm);line-height:1.12;margin-bottom:12px">
+        Ausgewählte <span style="color:var(--orange)">Projekte.</span>
+      </h2>
+      <p style="font-size:14.5px;color:var(--blue);max-width:500px;line-height:1.8">
+        KI-produzierte Produktbilder &amp; Video-Ads für Fashion, Lifestyle und mehr.
+      </p>
+    </div>
+  </div>
+
+  <div class="container" style="padding-top:40px;padding-bottom:60px">
+
+    <!-- ── TYPE TABS: Videos / Bilder ── -->
+    <div style="display:flex;gap:4px;margin-bottom:28px;border-bottom:1px solid var(--line);padding-bottom:0">
+      <button id="typetab-videos" onclick="switchType('videos')"
+        style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+               padding:10px 22px;background:none;border:none;border-bottom:2px solid var(--orange);
+               color:var(--orange);cursor:pointer;margin-bottom:-1px;transition:all .2s">
+        ▶&nbsp; Videos
+      </button>
+      <button id="typetab-bilder" onclick="switchType('bilder')"
+        style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+               padding:10px 22px;background:none;border:none;border-bottom:2px solid transparent;
+               color:var(--muted);cursor:pointer;margin-bottom:-1px;transition:all .2s">
+        ◼&nbsp; Bilder
+      </button>
+    </div>
+
+    <!-- ══ VIDEOS SECTION ══ -->
+    <div id="port-videos">
+      <div style="display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap">
+        <button class="cat-tab active" onclick="switchCatV('VF',this)">Fashion</button>
+        <button class="cat-tab" onclick="switchCatV('VL',this)">Lifestyle</button>
+        <button class="cat-tab" disabled>Beauty <span style="font-size:9px;opacity:.6;margin-left:4px">SOON</span></button>
+        <button class="cat-tab" disabled>Food <span style="font-size:9px;opacity:.6;margin-left:4px">SOON</span></button>
+      </div>
+
+      <!-- Videos: Fashion -->
+      <div id="cat-VF" class="grid-port">
+        <div class="port-card" style="background:linear-gradient(145deg,#1e0835,var(--navy))" onclick="openModal('Dark Hypermotion Spot','Oversized Hoodie','HYPERMOTION','')">
+          <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <div class="port-overlay"><div class="play-btn">▶</div></div>
+          <span style="position:absolute;top:12px;left:12px"><span class="tag tag-dark" style="font-size:9px">HYPERMOTION</span></span>
+          <div class="port-bottom"><div style="font-weight:600;font-size:13.5px;color:#fff">Dark Hypermotion Spot</div><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--blue)">Oversized Hoodie</div></div>
+        </div>
+        <div class="port-card" style="background:linear-gradient(145deg,#14062a,var(--navy))" onclick="openModal('Dark Editorial Spot','Oversized Hoodie','EDITORIAL','')">
+          <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <div class="port-overlay"><div class="play-btn">▶</div></div>
+          <span style="position:absolute;top:12px;left:12px"><span class="tag tag-dark" style="font-size:9px">EDITORIAL</span></span>
+          <div class="port-bottom"><div style="font-weight:600;font-size:13.5px;color:#fff">Dark Editorial Spot</div><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--blue)">Oversized Hoodie</div></div>
+        </div>
+        <div class="port-card" style="background:linear-gradient(145deg,#1a0f2e,var(--navy))" onclick="openModal('UGC Creator Ad','Oversized Hoodie','UGC','')">
+          <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <div class="port-overlay"><div class="play-btn">▶</div></div>
+          <span style="position:absolute;top:12px;left:12px"><span class="tag tag-dark" style="font-size:9px">UGC</span></span>
+          <div class="port-bottom"><div style="font-weight:600;font-size:13.5px;color:#fff">UGC Creator Ad</div><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--blue)">Oversized Hoodie</div></div>
+        </div>
+      </div>
+
+      <!-- Videos: Lifestyle -->
+      <div id="cat-VL" class="grid-port" style="display:none">
+        <div class="port-card" style="background:linear-gradient(145deg,#0f0820,var(--navy))" onclick="openModal('TV Spot','Creeo Cr 5 Noir EDP','TV SPOT','')">
+          <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <div class="port-overlay"><div class="play-btn">▶</div></div>
+          <span style="position:absolute;top:12px;left:12px"><span class="tag tag-dark" style="font-size:9px">TV SPOT</span></span>
+          <div class="port-bottom"><div style="font-weight:600;font-size:13.5px;color:#fff">TV Spot</div><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--blue)">Creeo Cr 5 Noir EDP</div></div>
+        </div>
+        <div class="port-card" style="background:linear-gradient(145deg,#160d2a,var(--navy))" onclick="openModal('Hypermotion Ad','Creeo Cr 5 Noir EDP','HYPERMOTION','')">
+          <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <div class="port-overlay"><div class="play-btn">▶</div></div>
+          <span style="position:absolute;top:12px;left:12px"><span class="tag tag-dark" style="font-size:9px">HYPERMOTION</span></span>
+          <div class="port-bottom"><div style="font-weight:600;font-size:13.5px;color:#fff">Hypermotion Ad</div><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--blue)">Creeo Cr 5 Noir EDP</div></div>
+        </div>
+        <div class="port-card" style="background:linear-gradient(145deg,#130920,var(--navy))" onclick="openModal('UGC Creator Ad','Creeo Cr 5 Noir EDP','UGC','')">
+          <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <div class="port-overlay"><div class="play-btn">▶</div></div>
+          <span style="position:absolute;top:12px;left:12px"><span class="tag tag-dark" style="font-size:9px">UGC</span></span>
+          <div class="port-bottom"><div style="font-weight:600;font-size:13.5px;color:#fff">UGC Creator Ad</div><div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--blue)">Creeo Cr 5 Noir EDP</div></div>
+        </div>
+      </div>
+    </div><!-- end port-videos -->
+
+    <!-- ══ BILDER SECTION ══ -->
+    <div id="port-bilder" style="display:none">
+      <div style="display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap">
+        <button class="cat-tab active" onclick="switchCatB('BF',this)">Fashion</button>
+        <button class="cat-tab" onclick="switchCatB('BL',this)">Lifestyle</button>
+        <button class="cat-tab" disabled>Beauty <span style="font-size:9px;opacity:.6;margin-left:4px">SOON</span></button>
+        <button class="cat-tab" disabled>Food <span style="font-size:9px;opacity:.6;margin-left:4px">SOON</span></button>
+      </div>
+
+      <!-- Bilder: Fashion (9:16 portrait grid) -->
+      <div id="cat-BF" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px">
+        <div class="port-card" style="aspect-ratio:9/16;background:linear-gradient(145deg,#1e0835,#0a0520)" onclick="openImage('','Hero Shot 01','Oversized Hoodie','HERO')">
+          <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <!-- ▼ Bild-URL: src="..." -->
+          <img src="" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85" onerror="this.style.display='none'">
+          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
+          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">HERO</span></span>
+          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Hero Shot 01</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Oversized Hoodie</div></div>
+        </div>
+        <div class="port-card" style="aspect-ratio:9/16;background:linear-gradient(145deg,#14062a,#0e0620)" onclick="openImage('','Editorial Shot 01','Oversized Hoodie','EDITORIAL')">
+          <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85" onerror="this.style.display='none'">
+          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
+          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">EDITORIAL</span></span>
+          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Editorial Shot 01</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Oversized Hoodie</div></div>
+        </div>
+        <div class="port-card" style="aspect-ratio:9/16;background:linear-gradient(145deg,#1a0f2e,#120830)" onclick="openImage('','Lookbook Shot 01','Oversized Hoodie','LOOKBOOK')">
+          <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85" onerror="this.style.display='none'">
+          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
+          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">LOOKBOOK</span></span>
+          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Lookbook Shot 01</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Oversized Hoodie</div></div>
+        </div>
+        <div class="port-card" style="aspect-ratio:9/16;background:linear-gradient(145deg,#0e0628,#1a0f2e)" onclick="openImage('','E-Commerce Shot 01','Oversized Hoodie','E-COMMERCE')">
+          <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85" onerror="this.style.display='none'">
+          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
+          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">E-COMMERCE</span></span>
+          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">E-Commerce Shot 01</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Oversized Hoodie</div></div>
+        </div>
+      </div>
+
+      <!-- Bilder: Lifestyle -->
+      <div id="cat-BL" style="display:none;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px">
+        <div class="port-card" style="aspect-ratio:9/16;background:linear-gradient(145deg,#0f0820,#160d2a)" onclick="openImage('','Product Shot 01','Creeo Cr 5 Noir EDP','HERO')">
+          <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85" onerror="this.style.display='none'">
+          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
+          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">HERO</span></span>
+          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Product Shot 01</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Creeo Cr 5 Noir EDP</div></div>
+        </div>
+        <div class="port-card" style="aspect-ratio:9/16;background:linear-gradient(145deg,#1c0d38,#100820)" onclick="openImage('','Mood Shot 01','Creeo Cr 5 Noir EDP','MOOD')">
+          <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85" onerror="this.style.display='none'">
+          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
+          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">MOOD</span></span>
+          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Mood Shot 01</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Creeo Cr 5 Noir EDP</div></div>
+        </div>
+        <div class="port-card" style="aspect-ratio:9/16;background:linear-gradient(145deg,#130920,#0e0820)" onclick="openImage('','Editorial Shot 01','Creeo Cr 5 Noir EDP','EDITORIAL')">
+          <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85" onerror="this.style.display='none'">
+          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
+          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">EDITORIAL</span></span>
+          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Editorial Shot 01</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Creeo Cr 5 Noir EDP</div></div>
+        </div>
+        <div class="port-card" style="aspect-ratio:9/16;background:linear-gradient(145deg,#180d30,#0f0820)" onclick="openImage('','E-Commerce Shot 01','Creeo Cr 5 Noir EDP','E-COMMERCE')">
+          <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85" onerror="this.style.display='none'">
+          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
+          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">E-COMMERCE</span></span>
+          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">E-Commerce Shot 01</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Creeo Cr 5 Noir EDP</div></div>
+        </div>
+      </div>
+
+      <p style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);margin-top:20px;letter-spacing:.06em">
+        Bilder-URLs eintragen: src="" in jedem img-Tag ersetzen · Weitere Bilder auf Anfrage
+      </p>
+    </div><!-- end port-bilder -->
+
+    <!-- Footer note -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:28px;flex-wrap:wrap;gap:12px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="live-dot"></span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.08em">LIVE WENN URL HINTERLEGT</span>
+      </div>
+      <p style="font-size:12px;color:var(--muted)">Weitere Cases auf Anfrage verfügbar.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     PAGE: PRICING
+═══════════════════════════════════════════════════════════════════════════ -->
+<div id="page-pricing" class="page" style="padding-top:62px">
+  <div class="page-banner">
+    <div class="hero-grid"></div>
+    <div class="container" style="position:relative;z-index:1">
+      <p class="eyebrow">04 / Preise</p>
+      <h2 style="font-size:clamp(1.7rem,3.5vw,2.4rem);font-weight:800;color:var(--warm);line-height:1.12;margin-bottom:12px">
+        Transparente <span style="color:var(--orange)">Pakete.</span>
+      </h2>
+      <p style="font-size:14.5px;color:var(--blue);max-width:500px;line-height:1.8">
+        Keine versteckten Kosten. Vollständige KI-Produktion inklusive.
+      </p>
+    </div>
+  </div>
+
+  <div class="container" style="padding-top:56px;padding-bottom:60px">
+
+    <!-- Images-only entry option -->
+    <div style="margin-bottom:20px;border-radius:8px;overflow:hidden;border:1px solid rgba(255,107,43,.2);box-shadow:0 4px 20px rgba(0,0,0,.15)">
+      <div style="background-color:#1a0f2e;background-image:linear-gradient(rgba(255,107,43,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,107,43,.06) 1px,transparent 1px);background-size:32px 32px;padding:20px 26px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;position:relative">
+        <div style="position:absolute;top:10px;left:10px;width:14px;height:14px;border-top:1px solid rgba(255,107,43,.4);border-left:1px solid rgba(255,107,43,.4)"></div>
+        <div style="position:absolute;bottom:10px;right:10px;width:14px;height:14px;border-bottom:1px solid rgba(255,107,43,.4);border-right:1px solid rgba(255,107,43,.4)"></div>
+        <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap">
+          <div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(255,107,43,.5);letter-spacing:.18em;text-transform:uppercase;margin-bottom:4px">00 / EINSTIEG</div>
+            <div style="display:flex;align-items:baseline;gap:8px">
+              <span style="font-size:2rem;font-weight:800;color:var(--warm);line-height:1">299 €</span>
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--blue)">Nur Produktbilder</span>
+            </div>
+          </div>
+          <div style="width:1px;height:40px;background:rgba(255,107,43,.15)" class="hide-mobile"></div>
+          <div style="display:flex;gap:20px;flex-wrap:wrap">
+            <div style="display:flex;align-items:center;gap:7px">
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--orange)">→</span>
+              <span style="font-size:13px;color:var(--warm)">10 KI-Produktbilder</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:7px">
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--orange)">→</span>
+              <span style="font-size:13px;color:var(--warm)">3 Szenarien</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:7px">
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--orange)">→</span>
+              <span style="font-size:13px;color:var(--warm)">1 Revision</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:7px">
+              <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--orange)">→</span>
+              <span style="font-size:13px;color:var(--warm)">Shop · Social · Web</span>
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-outline" onclick="showPage('kontakt')" style="white-space:nowrap">Bilder anfragen</button>
+      </div>
+      <div style="padding:10px 18px;background:rgba(24,24,47,.95);border-top:1px solid rgba(255,107,43,.12);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(255,107,43,.5);letter-spacing:.12em">IDEAL FÜR: E-COMMERCE · WEBSITE HERO · LOOKBOOK</span>
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(155,163,187,.5)">≈ 30 €/Bild vs. 50–150 € klassisch</span>
+      </div>
+    </div>
+
+    <div class="grid-pricing" style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:start">
+
+      <!-- Starter -->
+      <div class="price-card">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.15em;margin-bottom:8px">01 / STARTER</div>
+        <div style="display:flex;align-items:baseline;gap:4px;margin-bottom:6px">
+          <span style="font-size:2.8rem;font-weight:800;color:var(--orange);line-height:1">499€</span>
+          
+        </div>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:16px">Ideal für erste Projekte &amp; Test-Kampagnen</p>
+        <hr style="border:none;border-top:1px solid var(--line);margin-bottom:4px">
+        <ul style="list-style:none;margin:4px 0 26px">
+          <li class="price-feat-li">5 KI-Produktbilder</li>
+          <li class="price-feat-li">1 Video-Ad (15 Sek)</li>
+          <li class="price-feat-li">1 Revision inklusive</li>
+          <li class="price-feat-li" style="border:none">Delivery in 5 Werktagen</li>
+        </ul>
+        <button class="btn btn-ghost btn-full" onclick="showPage('kontakt')">Paket anfragen</button>
+      </div>
+
+      <!-- Professional (featured) -->
+      <div class="price-card featured">
+        <div class="feat-badge">★ EMPFOHLEN</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue);letter-spacing:.15em;margin-bottom:8px">02 / PROFESSIONAL</div>
+        <div style="display:flex;align-items:baseline;gap:4px;margin-bottom:6px">
+          <span style="font-size:2.8rem;font-weight:800;color:var(--warm);line-height:1">999€</span>
+          
+        </div>
+        <p style="font-size:13px;color:var(--blue);margin-bottom:16px">Vollständige Produktion für eine Kampagne</p>
+        <hr style="border:none;border-top:1px solid rgba(155,163,187,.12);margin-bottom:4px">
+        <ul style="list-style:none;margin:4px 0 26px">
+          <li class="price-feat-li">15 KI-Produktbilder</li>
+          <li class="price-feat-li">2 Video-Ads</li>
+          <li class="price-feat-li">2 Revisionen inklusive</li>
+          <li class="price-feat-li" style="border:none">Delivery in 5 Werktagen</li>
+        </ul>
+        <button class="btn btn-primary btn-full" onclick="showPage('kontakt')">Paket anfragen</button>
+      </div>
+
+      <!-- Individual -->
+      <div class="price-card">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.15em;margin-bottom:8px">03 / INDIVIDUELL</div>
+        <div style="display:flex;align-items:baseline;gap:4px;margin-bottom:6px">
+          <span style="font-size:2.8rem;font-weight:800;color:var(--orange);line-height:1">Auf</span>
+        </div>
+        <div style="font-size:2rem;font-weight:800;color:var(--orange);line-height:1;margin-bottom:6px">Anfrage</div>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:16px">Maßgeschneidertes Paket für dein Projekt</p>
+        <hr style="border:none;border-top:1px solid var(--line);margin-bottom:4px">
+        <ul style="list-style:none;margin:4px 0 26px">
+          <li class="price-feat-li">Individueller Umfang</li>
+          <li class="price-feat-li">Alle Formate möglich</li>
+          <li class="price-feat-li">Max. 3 Revisionen</li>
+          <li class="price-feat-li" style="border:none">Strategie-Call inklusive</li>
+        </ul>
+        <button class="btn btn-ghost btn-full" onclick="showPage('kontakt')">Angebot anfragen</button>
+      </div>
+    </div>
+
+    <!-- Add-ons -->
+    <div style="margin-top:24px;padding:24px 26px;border-radius:8px;background:var(--navy);border:1px solid rgba(255,107,43,.2);position:relative;overflow:hidden">
+      <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,107,43,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,107,43,.04) 1px,transparent 1px);background-size:32px 32px;pointer-events:none"></div>
+      <div style="position:relative;z-index:1">
+        <p style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--orange);letter-spacing:.18em;text-transform:uppercase;margin-bottom:16px">// Zu jedem Paket zubuchbar</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px">
+          <div style="background:rgba(255,107,43,.08);border:1px solid rgba(255,107,43,.2);border-radius:6px;padding:14px 16px;text-align:center">
+            <div style="font-size:1.3rem;font-weight:800;color:var(--warm)">250 €</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--orange);letter-spacing:.1em;text-transform:uppercase;margin-top:4px">+ 1 Revision</div>
+          </div>
+          <div style="background:rgba(255,107,43,.08);border:1px solid rgba(255,107,43,.2);border-radius:6px;padding:14px 16px;text-align:center">
+            <div style="font-size:1.3rem;font-weight:800;color:var(--warm)">499 €</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--orange);letter-spacing:.1em;text-transform:uppercase;margin-top:4px">+ 1 Video-Ad</div>
+          </div>
+          <div style="background:rgba(255,107,43,.08);border:1px solid rgba(255,107,43,.2);border-radius:6px;padding:14px 16px;text-align:center">
+            <div style="font-size:1.3rem;font-weight:800;color:var(--warm)">199 €</div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--orange);letter-spacing:.1em;text-transform:uppercase;margin-top:4px">+ 10 Bilder</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     PAGE: KONTAKT
+═══════════════════════════════════════════════════════════════════════════ -->
+<div id="page-kontakt" class="page" style="padding-top:62px">
+  <div class="page-banner">
+    <div class="hero-grid"></div>
+    <div class="container" style="position:relative;z-index:1">
+      <p class="eyebrow">05 / Kontakt</p>
+      <h2 style="font-size:clamp(1.7rem,3.5vw,2.4rem);font-weight:800;color:var(--warm);line-height:1.12;margin-bottom:12px">
+        Lass uns <span style="color:var(--orange)">loslegen.</span>
+      </h2>
+      <p style="font-size:14.5px;color:var(--blue);max-width:500px;line-height:1.8">
+        Beschreib kurz dein Projekt — ich melde mich innerhalb von 48h.
+      </p>
+    </div>
+  </div>
+
+  <div class="container" style="padding-top:56px;padding-bottom:60px">
+    <div class="contact-grid" style="display:grid;grid-template-columns:1fr 1.3fr;gap:48px;align-items:start">
+
+      <!-- Info -->
+      <div>
+        <div class="contact-row">
+          <div class="contact-icon">✉️</div>
+          <div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;margin-bottom:3px">E-Mail</div>
+            <div style="font-weight:600;font-size:14px">hello@duketus-productions.de</div>
+          </div>
+        </div>
+        <div class="contact-row" style="border:none">
+          <div class="contact-icon">⏱</div>
+          <div>
+            <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;margin-bottom:3px">Antwortzeit</div>
+            <div style="font-weight:600;font-size:14px">Innerhalb von 48 Stunden</div>
+          </div>
+        </div>
+
+        <div style="margin-top:28px;padding:18px 20px;border-radius:8px;background:var(--orange-t);border:1px solid var(--orange-b);position:relative">
+          <div class="corner tl" style="top:0;left:0"></div>
+          <p style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--orange);letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px">Was du in die Nachricht schreiben solltest</p>
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:7px">
+            <li style="font-size:13px;color:var(--text);display:flex;gap:8px;line-height:1.5">
+              <span style="color:var(--orange);font-family:'IBM Plex Mono',monospace;font-size:10px;flex-shrink:0;margin-top:2px">→</span>
+              <span><strong>Dein Produkt</strong> — Was verkaufst du? Welche Branche?</span>
+            </li>
+            <li style="font-size:13px;color:var(--text);display:flex;gap:8px;line-height:1.5">
+              <span style="color:var(--orange);font-family:'IBM Plex Mono',monospace;font-size:10px;flex-shrink:0;margin-top:2px">→</span>
+              <span><strong>Verwendungszweck</strong> — Social Ads, Website, TV, E-Commerce?</span>
+            </li>
+            <li style="font-size:13px;color:var(--text);display:flex;gap:8px;line-height:1.5">
+              <span style="color:var(--orange);font-family:'IBM Plex Mono',monospace;font-size:10px;flex-shrink:0;margin-top:2px">→</span>
+              <span><strong>Budget &amp; Zeitplan</strong> — Wann brauchst du es? Welches Paket?</span>
+            </li>
+            <li style="font-size:13px;color:var(--text);display:flex;gap:8px;line-height:1.5">
+              <span style="color:var(--orange);font-family:'IBM Plex Mono',monospace;font-size:10px;flex-shrink:0;margin-top:2px">→</span>
+              <span><strong>Referenzen</strong> — Gibt es Bilder/Links die deinen gewünschten Stil zeigen?</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Form -->
+      <div id="form-wrap" style="background:var(--white);border-radius:10px;padding:32px;box-shadow:var(--sh1);border:1px solid var(--line);position:relative">
+        <div class="corner tl"></div><div class="corner br"></div>
+        <p style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--orange);letter-spacing:.15em;text-transform:uppercase;margin-bottom:20px">// Anfrage senden</p>
+        <div class="form-row" style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <div class="form-group" style="margin-bottom:16px">
+            <label class="form-label">Name</label>
+            <input class="form-input" id="f-name" placeholder="Dein Name" type="text">
+          </div>
+          <div class="form-group" style="margin-bottom:16px">
+            <label class="form-label">E-Mail</label>
+            <input class="form-input" id="f-email" placeholder="email@domain.de" type="email">
+          </div>
+        </div>
+        <div style="margin-bottom:16px">
+          <label class="form-label">Leistung</label>
+          <select class="form-input" id="f-service">
+            <option value="" disabled selected>Bitte wählen …</option>
+            <option>KI Produktbilder</option>
+            <option>KI Product Ads — Social</option>
+            <option>KI Product Ads — TV Spot</option>
+            <option>KI Product Ads — Website Hero</option>
+            <option>Individuelles Paket</option>
+          </select>
+        </div>
+        <div style="margin-bottom:16px">
+          <label class="form-label">Dein Projekt</label>
+          <textarea class="form-input" id="f-msg" rows="4" style="resize:vertical" placeholder="z.B. Produkt: Parfum für Herren · Zweck: Instagram Ads · Budget: Starter-Paket · Stil: dunkel & cineastisch"></textarea>
+        </div>
+        <button class="btn btn-primary btn-full" onclick="submitForm()">Anfrage absenden →</button>
+        <p style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);margin-top:12px;text-align:center;letter-spacing:.06em">Antwort innerhalb 48h · Keine Verpflichtung</p>
+      </div>
+
+      <!-- Success state (hidden) -->
+      <div id="form-success" style="display:none;background:var(--white);border-radius:10px;padding:32px;box-shadow:var(--sh1);border:1px solid var(--line);text-align:center">
+        <div style="font-size:2.8rem;margin-bottom:14px">🎉</div>
+        <h3 style="font-weight:700;font-size:17px;margin-bottom:6px">Nachricht gesendet!</h3>
+        <p style="color:var(--muted);font-size:13px">Ich melde mich innerhalb von 48h bei dir.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ IMPRESSUM ════════════════════════════════════════════════════════════ -->
+<div id="page-impressum" class="page" style="padding-top:62px;background:var(--cream);min-height:100vh">
+  <div class="page-banner">
+    <div class="hero-grid"></div>
+    <div class="container" style="position:relative;z-index:1">
+      <p class="eyebrow">Legal</p>
+      <h2 style="font-size:clamp(1.7rem,3.5vw,2.4rem);font-weight:800;color:var(--warm);line-height:1.12">Impressum</h2>
+    </div>
+  </div>
+  <div class="container" style="padding:48px 40px;max-width:680px">
+    <div style="background:var(--white);border-radius:8px;padding:32px;border:1px solid var(--line);line-height:1.8;font-size:14px;color:var(--text)">
+      <p style="font-weight:700;font-size:16px;margin-bottom:4px">Duketus Productions</p>
+      <p style="color:var(--muted);font-size:13px;margin-bottom:24px;font-family:'IBM Plex Mono',monospace;letter-spacing:.06em">AI Content Services</p>
+
+      <p style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--orange);letter-spacing:.18em;text-transform:uppercase;margin-bottom:8px">Angaben gemäß § 5 TMG</p>
+      <p><strong>Ryan-Duke Koch</strong><br>
+      <span style="color:var(--muted)">Kuhmühle 3<br>
+      22087 Hamburg<br>
+      Deutschland</span></p>
+
+      <hr style="border:none;border-top:1px solid var(--line);margin:20px 0">
+
+      <p style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--orange);letter-spacing:.18em;text-transform:uppercase;margin-bottom:8px">Kontakt</p>
+      <p>E-Mail: <a href="mailto:hello@duketus-productions.de" style="color:var(--orange)">hello@duketus-productions.de</a></p>
+
+      <hr style="border:none;border-top:1px solid var(--line);margin:20px 0">
+
+      <p style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--orange);letter-spacing:.18em;text-transform:uppercase;margin-bottom:8px">Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV</p>
+      <p>Ryan-Duke Koch<br>
+      <span style="color:var(--muted)">Kuhmühle 3, 22087 Hamburg</span></p>
+
+      <hr style="border:none;border-top:1px solid var(--line);margin:20px 0">
+
+      <p style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--orange);letter-spacing:.18em;text-transform:uppercase;margin-bottom:8px">Haftungsausschluss</p>
+      <p style="color:var(--muted);font-size:13px">Die Inhalte dieser Website wurden mit größtmöglicher Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte kann keine Gewähr übernommen werden. Als Diensteanbieter sind wir gemäß § 7 Abs. 1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich.</p>
+    </div>
+    <button class="btn btn-ghost-dark btn-sm" style="margin-top:20px" onclick="showPage('home')">← Zurück zur Website</button>
+  </div>
+</div>
+
+<!-- ═══ DATENSCHUTZ ══════════════════════════════════════════════════════════ -->
+<div id="page-datenschutz" class="page" style="padding-top:62px;background:var(--cream);min-height:100vh">
+  <div class="page-banner">
+    <div class="hero-grid"></div>
+    <div class="container" style="position:relative;z-index:1">
+      <p class="eyebrow">Legal</p>
+      <h2 style="font-size:clamp(1.7rem,3.5vw,2.4rem);font-weight:800;color:var(--warm);line-height:1.12">Datenschutzerklärung</h2>
+    </div>
+  </div>
+  <div class="container" style="padding:48px 40px;max-width:680px">
+    <div style="background:var(--white);border-radius:8px;padding:32px;border:1px solid var(--line);line-height:1.8;font-size:14px;color:var(--text);display:flex;flex-direction:column;gap:20px">
+
+      <div>
+        <p style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--orange);letter-spacing:.18em;text-transform:uppercase;margin-bottom:8px">1. Verantwortlicher</p>
+        <p>Ryan-Duke Koch, Duketus Productions<br>E-Mail: <a href="mailto:hello@duketus-productions.de" style="color:var(--orange)">hello@duketus-productions.de</a></p>
+      </div>
+
+      <div>
+        <p style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--orange);letter-spacing:.18em;text-transform:uppercase;margin-bottom:8px">2. Hosting</p>
+        <p style="color:var(--muted);font-size:13px">Diese Website wird bei Vercel Inc., 340 Pine Street, San Francisco, CA 94104, USA gehostet. Beim Aufruf der Website werden automatisch Server-Logfiles übertragen (IP-Adresse, Uhrzeit, aufgerufene Seite). Diese Daten werden ausschließlich zur technischen Bereitstellung der Website verwendet.</p>
+      </div>
+
+      <div>
+        <p style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--orange);letter-spacing:.18em;text-transform:uppercase;margin-bottom:8px">3. Kontaktformular</p>
+        <p style="color:var(--muted);font-size:13px">Wenn du das Kontaktformular nutzt, werden deine Angaben (Name, E-Mail, Nachricht) zur Bearbeitung der Anfrage verarbeitet. Die Daten werden über Web3Forms (web3forms.com) übermittelt und ausschließlich zur Beantwortung deiner Anfrage verwendet. Keine Weitergabe an Dritte ohne deine Einwilligung. Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO.</p>
+      </div>
+
+      <div>
+        <p style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--orange);letter-spacing:.18em;text-transform:uppercase;margin-bottom:8px">4. Keine Cookies</p>
+        <p style="color:var(--muted);font-size:13px">Diese Website verwendet keine Tracking-Cookies und keine Analyse-Tools. Es werden keinerlei personenbezogene Daten für Werbezwecke erhoben oder gespeichert.</p>
+      </div>
+
+      <div>
+        <p style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--orange);letter-spacing:.18em;text-transform:uppercase;margin-bottom:8px">5. Deine Rechte</p>
+        <p style="color:var(--muted);font-size:13px">Du hast jederzeit das Recht auf Auskunft, Berichtigung, Löschung und Einschränkung der Verarbeitung deiner gespeicherten Daten sowie ein Widerspruchsrecht. Anfragen richtest du an: <a href="mailto:hello@duketus-productions.de" style="color:var(--orange)">hello@duketus-productions.de</a></p>
+      </div>
+
+      <div>
+        <p style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--orange);letter-spacing:.18em;text-transform:uppercase;margin-bottom:8px">6. Beschwerderecht</p>
+        <p style="color:var(--muted);font-size:13px">Du hast das Recht, dich bei der zuständigen Datenschutzaufsichtsbehörde zu beschweren. Zuständig ist der Hamburgische Beauftragte für Datenschutz und Informationsfreiheit (HmbBfDI).</p>
+      </div>
+    </div>
+    <button class="btn btn-ghost-dark btn-sm" style="margin-top:20px" onclick="showPage('home')">← Zurück zur Website</button>
+  </div>
+</div>
+
+
+<div class="modal-bd" id="img-modal">
+  <div class="modal-box" style="max-width:480px" onclick="event.stopPropagation()">
+    <button class="modal-x" onclick="closeImgModal()">✕</button>
+    <div id="img-modal-wrap" style="position:relative;aspect-ratio:9/16;background:var(--navy);overflow:hidden">
+      <img id="img-modal-img" src="" alt="" style="width:100%;height:100%;object-fit:cover">
+      <div id="img-modal-placeholder" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:var(--navy-m)">
+        <span style="font-size:2.5rem;opacity:.3">◼</span>
+        <p style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--blue);text-align:center">Bild-URL noch nicht hinterlegt<br><span style="opacity:.6;font-size:10px">src="" im Code ersetzen</span></p>
+      </div>
+    </div>
+    <div class="modal-meta">
+      <div>
+        <div id="img-modal-tag" style="margin-bottom:4px"></div>
+        <div id="img-modal-title" style="font-weight:600;font-size:14px"></div>
+        <div id="img-modal-client" style="font-size:12px;color:var(--muted);font-family:'IBM Plex Mono',monospace"></div>
+      </div>
+      <a id="img-modal-link" href="#" target="_blank" rel="noreferrer" class="btn btn-ghost btn-sm" style="display:none">↗ Öffnen</a>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal-bd" id="modal">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <button class="modal-x" onclick="closeModal()">✕</button>
+    <div class="modal-vid" id="modal-vid">
+      <div class="modal-placeholder" id="modal-placeholder">
+        <span style="font-size:2rem">🎬</span>
+        <p style="color:var(--blue);font-size:13px;text-align:center;line-height:1.5">
+          Video wird bald verlinkt.<br>
+          <span style="opacity:.6;font-size:11px;font-family:'IBM Plex Mono',monospace">Trag die URL in videoUrl ein.</span>
+        </p>
+      </div>
+    </div>
+    <div class="modal-meta">
+      <div>
+        <div id="modal-tag" style="margin-bottom:5px"></div>
+        <div id="modal-title" style="font-weight:600;font-size:14px"></div>
+        <div id="modal-client" style="font-size:12px;color:var(--muted);font-family:'IBM Plex Mono',monospace"></div>
+      </div>
+      <a id="modal-link" href="#" target="_blank" rel="noreferrer" class="btn btn-ghost btn-sm" style="display:none">↗ Öffnen</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ FOOTER ════════════════════════════════════════════════════════════ -->
+<footer class="footer">
+  <button class="nav-logo" onclick="showPage('home')">
+    Duketus<span class="dot">.</span>Productions
+    <span style="font-family:'IBM Plex Mono',monospace;font-weight:400;font-size:10px;color:var(--blue);margin-left:10px">· AI Content Services</span>
+  </button>
+  <div class="footer-links" style="display:flex;gap:20px">
+    <button class="foot-link" onclick="showPage('impressum')">Impressum</button>
+    <button class="foot-link" onclick="showPage('datenschutz')">Datenschutz</button>
+  </div>
+  <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:rgba(155,163,187,.5);letter-spacing:.06em">© 2026 DUKETUS PRODUCTIONS</div>
+</footer>
+
+<script>
+// ── PAGE NAVIGATION ─────────────────────────────────────────────────────────
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.querySelectorAll('.nav-btn, .mob-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.page === id);
+  });
+  closeMobileMenu();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── MOBILE MENU ──────────────────────────────────────────────────────────────
+function toggleMenu() {
+  const menu = document.getElementById('mobile-menu');
+  const ham = document.getElementById('hamburger');
+  const isOpen = menu.classList.contains('open');
+  menu.classList.toggle('open', !isOpen);
+  ham.classList.toggle('ham-open', !isOpen);
+}
+function closeMobileMenu() {
+  document.getElementById('mobile-menu').classList.remove('open');
+  document.getElementById('hamburger').classList.remove('ham-open');
+}
+
+// ── PORTFOLIO: TYPE + CATEGORY SWITCH ────────────────────────────────────────
+function switchType(type){
+  const vids = document.getElementById('port-videos');
+  const blds = document.getElementById('port-bilder');
+  const tv   = document.getElementById('typetab-videos');
+  const tb   = document.getElementById('typetab-bilder');
+  const activeStyle  = 'border-bottom:2px solid var(--orange);color:var(--orange)';
+  const inactiveStyle= 'border-bottom:2px solid transparent;color:var(--muted)';
+  if(type==='videos'){
+    vids.style.display='block'; blds.style.display='none';
+    tv.style.cssText=tv.style.cssText.replace(/border-bottom:[^;]+;color:[^;]+/,activeStyle);
+    tb.style.cssText=tb.style.cssText.replace(/border-bottom:[^;]+;color:[^;]+/,inactiveStyle);
+    tv.style.borderBottom='2px solid var(--orange)'; tv.style.color='var(--orange)';
+    tb.style.borderBottom='2px solid transparent';   tb.style.color='var(--muted)';
+  } else {
+    vids.style.display='none'; blds.style.display='block';
+    tv.style.borderBottom='2px solid transparent'; tv.style.color='var(--muted)';
+    tb.style.borderBottom='2px solid var(--orange)'; tb.style.color='var(--orange)';
+  }
+}
+
+function switchCatV(id, btn){
+  ['VF','VL'].forEach(c=>{ const el=document.getElementById('cat-'+c); if(el) el.style.display='none'; });
+  document.getElementById('cat-'+id).style.display='grid';
+  document.querySelectorAll('#port-videos .cat-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function switchCatB(id, btn){
+  ['BF','BL'].forEach(c=>{ const el=document.getElementById('cat-'+c); if(el) el.style.display='none'; });
+  const el = document.getElementById('cat-'+id);
+  el.style.display='grid';
+  document.querySelectorAll('#port-bilder .cat-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// ── IMAGE MODAL ───────────────────────────────────────────────────────────────
+function openImage(src, title, client, format){
+  const modal = document.getElementById('img-modal');
+  const img   = document.getElementById('img-modal-img');
+  const ph    = document.getElementById('img-modal-placeholder');
+  document.getElementById('img-modal-title').textContent  = title;
+  document.getElementById('img-modal-client').textContent = client;
+  document.getElementById('img-modal-tag').innerHTML = `<span class="tag">${format}</span>`;
+  if(src){
+    img.src = src; img.style.display='block'; ph.style.display='none';
+    const lnk = document.getElementById('img-modal-link');
+    lnk.href=src; lnk.style.display='inline-flex';
+  } else {
+    img.style.display='none'; ph.style.display='flex';
+    document.getElementById('img-modal-link').style.display='none';
+  }
+  modal.classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeImgModal(){
+  document.getElementById('img-modal').classList.remove('open');
+  document.body.style.overflow='';
+}
+document.getElementById('img-modal').addEventListener('click', closeImgModal);
+
+
+// ── VIDEO MODAL ──────────────────────────────────────────────────────────────
+function openModal(title, client, format, videoUrl) {
+  const modal = document.getElementById('modal');
+  const vidWrap = document.getElementById('modal-vid');
+  const placeholder = document.getElementById('modal-placeholder');
+
+  // Set meta
+  document.getElementById('modal-title').textContent = title;
+  document.getElementById('modal-client').textContent = client;
+  document.getElementById('modal-tag').innerHTML = `<span class="tag">${format}</span>`;
+
+  // Clear previous media
+  const oldMedia = vidWrap.querySelector('video, iframe');
+  if (oldMedia) oldMedia.remove();
+  placeholder.style.display = 'none';
+
+  const link = document.getElementById('modal-link');
+
+  if (!videoUrl) {
+    placeholder.style.display = 'flex';
+    link.style.display = 'none';
+  } else if (videoUrl.includes('youtube') || videoUrl.includes('youtu.be')) {
+    const id = videoUrl.match(/(?:v=|youtu\.be\/)([^&?/]+)/)?.[1];
+    const iframe = document.createElement('iframe');
+    iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0`;
+    iframe.allow = 'autoplay; fullscreen';
+    iframe.allowFullscreen = true;
+    vidWrap.appendChild(iframe);
+    link.href = videoUrl;
+    link.style.display = 'inline-flex';
+  } else if (videoUrl.includes('vimeo')) {
+    const id = videoUrl.match(/vimeo\.com\/(\d+)/)?.[1];
+    const iframe = document.createElement('iframe');
+    iframe.src = `https://player.vimeo.com/video/${id}?autoplay=1&title=0`;
+    iframe.allow = 'autoplay; fullscreen';
+    iframe.allowFullscreen = true;
+    vidWrap.appendChild(iframe);
+    link.href = videoUrl;
+    link.style.display = 'inline-flex';
+  } else {
+    const video = document.createElement('video');
+    video.src = videoUrl;
+    video.controls = true;
+    video.autoplay = true;
+    video.playsInline = true;
+    vidWrap.appendChild(video);
+    link.href = videoUrl;
+    link.style.display = 'inline-flex';
+  }
+
+  modal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  const modal = document.getElementById('modal');
+  const vidWrap = document.getElementById('modal-vid');
+  modal.classList.remove('open');
+  document.body.style.overflow = '';
+  // Stop media
+  const media = vidWrap.querySelector('video, iframe');
+  if (media) media.remove();
+}
+
+// Close modal on backdrop click
+document.getElementById('modal').addEventListener('click', closeModal);
+
+// Keyboard close
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+});
+
+// ── HERO SLIDESHOW ────────────────────────────────────────────────────────────
+const SLIDE_DATA = [
+  { sub:'Oversized Hoodie · Hypermotion' },
+  { sub:'Oversized Hoodie · Editorial'   },
+  { sub:'Oversized Hoodie · UGC'         },
+  { sub:'Creeo Cr 5 Noir · TV Spot'      },
+  { sub:'Creeo Cr 5 Noir · Hypermotion'  },
+  { sub:'Creeo Cr 5 Noir · UGC'          },
+];
+
+(function initSlideshow(){
+  const slides = document.querySelectorAll('.hero-slide');
+  const dotsEl = document.getElementById('slide-dots');
+  const sublabel = document.getElementById('slide-sublabel');
+  if(!slides.length || !dotsEl) return;
+
+  let current = 0;
+
+  // Build dots
+  SLIDE_DATA.forEach((_,i) => {
+    const d = document.createElement('div');
+    d.className = 'slide-dot' + (i===0?' active':'');
+    d.onclick = () => goTo(i);
+    dotsEl.appendChild(d);
+  });
+
+  function goTo(n){
+    slides[current].classList.remove('active');
+    dotsEl.children[current].classList.remove('active');
+    current = n;
+    slides[current].classList.add('active');
+    dotsEl.children[current].classList.add('active');
+    sublabel.style.opacity = '0';
+    setTimeout(() => {
+      sublabel.textContent = SLIDE_DATA[current].sub;
+      sublabel.style.opacity = '1';
+    }, 200);
+  }
+
+  // Auto advance every 3.5s
+  setInterval(() => goTo((current + 1) % slides.length), 3500);
+})();
+
+
+function submitForm() {
+  document.getElementById('form-wrap').style.display = 'none';
+  document.getElementById('form-success').style.display = 'block';
+  // Reset after 4s
+  setTimeout(() => {
+    document.getElementById('form-wrap').style.display = 'block';
+    document.getElementById('form-success').style.display = 'none';
+    ['f-name','f-email','f-msg'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('f-service').selectedIndex = 0;
+  }, 4000);
+}
+</script>
+</body>
+</html>
