@@ -1138,7 +1138,7 @@ a{text-decoration:none}
             </div>
           </div>
         </div>
-        <button class="btn btn-outline" onclick="showPage('kontakt')" style="white-space:nowrap">Bilder anfragen</button>
+        <button class="btn btn-outline" onclick="goToKontakt('Einstieg')" style="white-space:nowrap">Bilder anfragen</button>
       </div>
       <div style="padding:10px 18px;background:rgba(24,24,47,.95);border-top:1px solid rgba(255,107,43,.12);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
         <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(255,107,43,.5);letter-spacing:.12em">IDEAL FÜR: E-COMMERCE · WEBSITE HERO · LOOKBOOK</span>
@@ -1163,7 +1163,7 @@ a{text-decoration:none}
           <li class="price-feat-li">1 Revision inklusive</li>
           <li class="price-feat-li" style="border:none">Delivery in 5 Werktagen</li>
         </ul>
-        <button class="btn btn-ghost btn-full" onclick="showPage('kontakt')">Paket anfragen</button>
+        <button class="btn btn-ghost btn-full" onclick="goToKontakt('Starter')">Paket anfragen</button>
       </div>
 
       <!-- Professional (featured) -->
@@ -1182,7 +1182,7 @@ a{text-decoration:none}
           <li class="price-feat-li">2 Revisionen inklusive</li>
           <li class="price-feat-li" style="border:none">Delivery in 5 Werktagen</li>
         </ul>
-        <button class="btn btn-primary btn-full" onclick="showPage('kontakt')">Paket anfragen</button>
+        <button class="btn btn-primary btn-full" onclick="goToKontakt('Professional')">Paket anfragen</button>
       </div>
 
       <!-- Individual -->
@@ -1200,7 +1200,7 @@ a{text-decoration:none}
           <li class="price-feat-li">Max. 3 Revisionen</li>
           <li class="price-feat-li" style="border:none">Strategie-Call inklusive</li>
         </ul>
-        <button class="btn btn-ghost btn-full" onclick="showPage('kontakt')">Angebot anfragen</button>
+        <button class="btn btn-ghost btn-full" onclick="goToKontakt('Individuelles')">Angebot anfragen</button>
       </div>
     </div>
 
@@ -1484,6 +1484,20 @@ a{text-decoration:none}
 
 <script>
 // ── PAGE NAVIGATION ─────────────────────────────────────────────────────────
+function goToKontakt(paket) {
+  showPage('kontakt');
+  setTimeout(() => {
+    const sel = document.getElementById('f-service');
+    if (!sel) return;
+    for (let i = 0; i < sel.options.length; i++) {
+      if (sel.options[i].text.startsWith(paket)) {
+        sel.selectedIndex = i;
+        break;
+      }
+    }
+  }, 80);
+}
+
 function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById('page-' + id).classList.add('active');
