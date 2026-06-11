@@ -313,6 +313,24 @@ a{text-decoration:none}
 .slide-dot.active{background:var(--orange);box-shadow:0 0 6px rgba(255,107,43,.5)}
 
 
+
+/* ── PRODUCT SUB-TABS ── */
+.prod-tab{padding:5px 14px;border-radius:20px;border:1px solid var(--line);
+  background:var(--white);color:var(--muted);cursor:pointer;transition:all .2s;
+  font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.05em;white-space:nowrap}
+.prod-tab:hover{border-color:var(--orange-b);color:var(--orange)}
+.prod-tab.active{background:rgba(255,107,43,.1);border-color:var(--orange-b);color:var(--orange)}
+
+/* ── IMAGE FORMAT GRID ── */
+.img-fmt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px}
+.img-fmt-grid .port-card{aspect-ratio:9/16}
+.img-fmt-grid.fmt-169{grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.img-fmt-grid.fmt-169 .port-card{aspect-ratio:16/9}
+@media(max-width:600px){
+  .img-fmt-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+  .img-fmt-grid.fmt-169{grid-template-columns:1fr}
+}
+
 /* ── DESKTOP SLIDESHOW HEIGHT FIX ── */
 @media(min-width:769px){
   .hero-visual{height:calc(100vh - 140px);display:flex;flex-direction:column;justify-content:center}
@@ -927,176 +945,374 @@ a{text-decoration:none}
 
     <!-- ══ BILDER ══ -->
     <div id="port-bilder" style="display:none">
-      <div style="display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap">
-        <button class="cat-tab active" onclick="switchCatB('BF',this)">Fashion</button>
-        <button class="cat-tab" onclick="switchCatB('BL',this)">Lifestyle</button>
-        <button class="cat-tab" onclick="switchCatB('BB',this)">Beauty</button>
-        <button class="cat-tab" onclick="switchCatB('BC',this)">Food</button>
+
+      <!-- ── Format toggle + Category tabs toolbar ── -->
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:16px">
+        <div style="display:flex;gap:8px;flex-wrap:wrap" id="bilder-cat-tabs">
+          <button class="cat-tab active" onclick="switchCatB('BF',this)">Fashion</button>
+          <button class="cat-tab" onclick="switchCatB('BL',this)">Lifestyle</button>
+          <button class="cat-tab" onclick="switchCatB('BB',this)">Beauty</button>
+          <button class="cat-tab" onclick="switchCatB('BC',this)">Food</button>
+        </div>
+        <!-- Format pill toggle -->
+        <div style="display:flex;background:var(--navy);border:1px solid rgba(255,107,43,.2);border-radius:6px;overflow:hidden;flex-shrink:0">
+          <button id="fmt-916" onclick="setImgFmt('916')" style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;padding:7px 14px;border:none;cursor:pointer;transition:all .2s;background:var(--orange);color:#fff">▯ 9:16</button>
+          <button id="fmt-169" onclick="setImgFmt('169')" style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;padding:7px 14px;border:none;cursor:pointer;transition:all .2s;background:transparent;color:var(--blue)">⬜ 16:9</button>
+        </div>
       </div>
 
-      <div id="cat-BF" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px">
-        <div class="port-card" style="aspect-ratio:9/16;background:linear-gradient(145deg,#1e0835,#0a0520)" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030341/Oversized_Hoodie_-_Dark_Mask_gnoxrr.png','Dark Mask','Oversized Hoodie','HERO')">
+      <!-- ── Product sub-tabs (swapped per category) ── -->
+      <div id="prod-tabs-BF" style="display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap">
+        <button class="prod-tab active" onclick="switchProd('BF','hoodie',this)">Oversized Hoodie</button>
+        <button class="prod-tab" onclick="switchProd('BF','arc7',this)">ARC-7 Cargo</button>
+      </div>
+      <div id="prod-tabs-BL" style="display:none;gap:6px;margin-bottom:18px;flex-wrap:wrap">
+        <button class="prod-tab active" onclick="switchProd('BL','noir',this)">Creeo Cr.5 Noir</button>
+        <button class="prod-tab" onclick="switchProd('BL','nox',this)">Nox Ember</button>
+      </div>
+      <div id="prod-tabs-BB" style="display:none;gap:6px;margin-bottom:18px;flex-wrap:wrap">
+        <button class="prod-tab active" onclick="switchProd('BB','cream',this)">Facial Cream</button>
+        <button class="prod-tab" onclick="switchProd('BB','aura',this)">Aura Glow Serum</button>
+      </div>
+      <div id="prod-tabs-BC" style="display:none;gap:6px;margin-bottom:18px;flex-wrap:wrap">
+        <button class="prod-tab active" onclick="switchProd('BC','chips',this)">Cr.5 Chips</button>
+        <button class="prod-tab" onclick="switchProd('BC','solara',this)">Solara Cold Brew</button>
+      </div>
+
+      <!-- ════ FASHION ════ -->
+      <div id="cat-BF">
+        <!-- Hoodie -->
+        <div id="prod-BF-hoodie" class="img-fmt-grid">
+        <div class="port-card" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030341/Oversized_Hoodie_-_Dark_Mask_gnoxrr.png','Dark Mask','Oversized Hoodie','HERO')">
           <div class="port-grid-inner"></div><div class="corner tl"></div>
-          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030341/Oversized_Hoodie_-_Dark_Mask_gnoxrr.png" alt="Cr.5 Oversized Hoodie – Dark Mask Editorial Shot" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85" onerror="this.style.display='none'">
+          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030341/Oversized_Hoodie_-_Dark_Mask_gnoxrr.png" alt="Dark Mask — Oversized Hoodie" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.88" onerror="this.style.display='none'">
           <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
           <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">HERO</span></span>
-          <span style='position:absolute;top:10px;right:10px;width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 5px #4ade80;display:block'></span>
           <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Dark Mask</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Oversized Hoodie</div></div>
         </div>
-        <div class="port-card" style="aspect-ratio:9/16;background:linear-gradient(145deg,#14062a,#0e0620)" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030348/Oversized_Hoodie_-_Rooftop_pfmxmo.png','Rooftop','Oversized Hoodie','CINEMATIC')">
+        <div class="port-card" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030348/Oversized_Hoodie_-_Rooftop_pfmxmo.png','Rooftop','Oversized Hoodie','CINEMATIC')">
           <div class="port-grid-inner"></div><div class="corner tl"></div>
-          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030348/Oversized_Hoodie_-_Rooftop_pfmxmo.png" alt="Cr.5 Oversized Hoodie – Cinematic Rooftop Night Shot" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85" onerror="this.style.display='none'">
+          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030348/Oversized_Hoodie_-_Rooftop_pfmxmo.png" alt="Rooftop — Oversized Hoodie" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.88" onerror="this.style.display='none'">
           <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
           <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">CINEMATIC</span></span>
-          <span style='position:absolute;top:10px;right:10px;width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 5px #4ade80;display:block'></span>
           <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Rooftop</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Oversized Hoodie</div></div>
         </div>
-        <div class="port-card" style="aspect-ratio:9/16;background:linear-gradient(145deg,#1a0f2e,#120830)" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030353/Oversized_Hoodie_-_Street_takxsk.png','Street','Oversized Hoodie','STREET')">
+        <div class="port-card" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030353/Oversized_Hoodie_-_Street_takxsk.png','Street','Oversized Hoodie','STREET')">
           <div class="port-grid-inner"></div><div class="corner tl"></div>
-          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030353/Oversized_Hoodie_-_Street_takxsk.png" alt="Cr.5 Oversized Hoodie – Berlin Street Style Photography" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85" onerror="this.style.display='none'">
+          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030353/Oversized_Hoodie_-_Street_takxsk.png" alt="Street — Oversized Hoodie" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.88" onerror="this.style.display='none'">
           <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
           <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">STREET</span></span>
-          <span style='position:absolute;top:10px;right:10px;width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 5px #4ade80;display:block'></span>
           <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Street</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Oversized Hoodie</div></div>
         </div>
-        <div class="port-card" style="aspect-ratio:9/16;background:linear-gradient(145deg,#0e0628,#1a0f2e)" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030561/Oversized_Hoodie_-_Flat_cvswzl.jpg','Flat Lay','Oversized Hoodie','PRODUCT')">
+        <div class="port-card" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030561/Oversized_Hoodie_-_Flat_cvswzl.jpg','Flat Lay','Oversized Hoodie','PRODUCT')">
           <div class="port-grid-inner"></div><div class="corner tl"></div>
-          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030561/Oversized_Hoodie_-_Flat_cvswzl.jpg" alt="Cr.5 Oversized Hoodie – Premium Flat Lay Product Shot" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85" onerror="this.style.display='none'">
+          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030561/Oversized_Hoodie_-_Flat_cvswzl.jpg" alt="Flat Lay — Oversized Hoodie" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.88" onerror="this.style.display='none'">
           <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
           <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">PRODUCT</span></span>
-          <span style='position:absolute;top:10px;right:10px;width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 5px #4ade80;display:block'></span>
           <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Flat Lay</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Oversized Hoodie</div></div>
         </div>
-      </div>
-
-      <div id="cat-BL" style="display:none;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px">
-        <div class="port-card" style="aspect-ratio:9/16;background:linear-gradient(145deg,#0f0820,#160d2a)" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030453/Creeo_Noir_Parfum_-_Male_Model_Side_jkdm3u.png','Male Model Side','Creeo Cr.5 Noir EDP','EDITORIAL')">
-          <div class="port-grid-inner"></div><div class="corner tl"></div>
-          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030453/Creeo_Noir_Parfum_-_Male_Model_Side_jkdm3u.png" alt="Creeo Cr.5 Noir EDP – Male Model Side Editorial" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85" onerror="this.style.display='none'">
-          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
-          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">EDITORIAL</span></span>
-          <span style='position:absolute;top:10px;right:10px;width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 5px #4ade80;display:block'></span>
-          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Male Model Side</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Creeo Cr.5 Noir EDP</div></div>
         </div>
-        <div class="port-card" style="aspect-ratio:9/16;background:linear-gradient(145deg,#1c0d38,#100820)" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030454/Creeo_Noir_Parfum_-_Male_Model_Front_hjdrch.png','Male Model Front','Creeo Cr.5 Noir EDP','HERO')">
+        <!-- ARC-7 -->
+        <div id="prod-BF-arc7" class="img-fmt-grid" style="display:none">
+        <div class="port-card" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200496/arc7_hose_3d_render_vese2s.png','3D Render','ARC-7 Cargo','REFERENCE')">
           <div class="port-grid-inner"></div><div class="corner tl"></div>
-          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030454/Creeo_Noir_Parfum_-_Male_Model_Front_hjdrch.png" alt="Creeo Cr.5 Noir EDP – Male Model Front Portrait" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85" onerror="this.style.display='none'">
+          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200496/arc7_hose_3d_render_vese2s.png" alt="3D Render — ARC-7 Cargo" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.88" onerror="this.style.display='none'">
           <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
-          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">HERO</span></span>
-          <span style='position:absolute;top:10px;right:10px;width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 5px #4ade80;display:block'></span>
-          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Male Model Front</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Creeo Cr.5 Noir EDP</div></div>
+          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">REFERENCE</span></span>
+          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">3D Render</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">ARC-7 Cargo</div></div>
         </div>
-        <div class="port-card" style="aspect-ratio:9/16;background:linear-gradient(145deg,#130920,#0e0820)" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030458/Creeo_Noir_Parfum_-_Penthouse_nbujxg.png','Penthouse','Creeo Cr.5 Noir EDP','LIFESTYLE')">
+        <div class="port-card" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200500/arc7_hose_produktfoto_dunkler_hintergrund_uqq0jx.png','Studio Dark','ARC-7 Cargo','PRODUCT')">
           <div class="port-grid-inner"></div><div class="corner tl"></div>
-          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030458/Creeo_Noir_Parfum_-_Penthouse_nbujxg.png" alt="Creeo Cr.5 Noir EDP – Dark Penthouse Lifestyle Shot" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85" onerror="this.style.display='none'">
-          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
-          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">LIFESTYLE</span></span>
-          <span style='position:absolute;top:10px;right:10px;width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 5px #4ade80;display:block'></span>
-          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Penthouse</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Creeo Cr.5 Noir EDP</div></div>
-        </div>
-        <div class="port-card" style="aspect-ratio:9/16;background:linear-gradient(145deg,#180d30,#0f0820)" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030508/Creeo_Noir_Parfum_-_Candles_d8zbnv.jpg','Candles','Creeo Cr.5 Noir EDP','MOOD')">
-          <div class="port-grid-inner"></div><div class="corner tl"></div>
-          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030508/Creeo_Noir_Parfum_-_Candles_d8zbnv.jpg" alt="Creeo Cr.5 Noir EDP – Candlelit Atmospheric Mood Shot" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85" onerror="this.style.display='none'">
-          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
-          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">MOOD</span></span>
-          <span style='position:absolute;top:10px;right:10px;width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 5px #4ade80;display:block'></span>
-          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Candles</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Creeo Cr.5 Noir EDP</div></div>
-        </div>
-      </div>
-
-      <div id="cat-BB" style="display:none;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px">
-        <div class="port-card" style="aspect-ratio:9/16;background:linear-gradient(145deg,#1a0828,#0f0820)" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030787/Creeo_Cr.5_Facial_Cream_-_Front_wlrakt.png','Front Hero','Creeo Cr.5 Facial Cream','HERO')">
-          <div class="port-grid-inner"></div><div class="corner tl"></div>
-          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030787/Creeo_Cr.5_Facial_Cream_-_Front_wlrakt.png" alt="Creeo Cr.5 Facial Cream – Hero Product Shot" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85" onerror="this.style.display='none'">
-          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
-          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">HERO</span></span>
-          <span style='position:absolute;top:10px;right:10px;width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 5px #4ade80;display:block'></span>
-          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Front Hero</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Creeo Cr.5 Facial Cream</div></div>
-        </div>
-        <div class="port-card" style="aspect-ratio:9/16;background:linear-gradient(145deg,#0e0820,#180d2a)" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030791/Creeo_Cr.5_Facial_Cream_-_Sink_c6dw2k.png','Sink Scene','Creeo Cr.5 Facial Cream','LIFESTYLE')">
-          <div class="port-grid-inner"></div><div class="corner tl"></div>
-          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030791/Creeo_Cr.5_Facial_Cream_-_Sink_c6dw2k.png" alt="Creeo Cr.5 Facial Cream – Luxury Bathroom Lifestyle" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85" onerror="this.style.display='none'">
-          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
-          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">LIFESTYLE</span></span>
-          <span style='position:absolute;top:10px;right:10px;width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 5px #4ade80;display:block'></span>
-          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Sink Scene</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Creeo Cr.5 Facial Cream</div></div>
-        </div>
-        <div class="port-card" style="aspect-ratio:9/16;background:linear-gradient(145deg,#1a0f2e,#0d0818)" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030796/Creeo_Cr.5_Facial_Cream_-_Application_uzaf9x.png','Application','Creeo Cr.5 Facial Cream','UGC')">
-          <div class="port-grid-inner"></div><div class="corner tl"></div>
-          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030796/Creeo_Cr.5_Facial_Cream_-_Application_uzaf9x.png" alt="Creeo Cr.5 Facial Cream – Skincare Application Close-up" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85" onerror="this.style.display='none'">
-          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
-          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">UGC</span></span>
-          <span style='position:absolute;top:10px;right:10px;width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 5px #4ade80;display:block'></span>
-          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Application</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Creeo Cr.5 Facial Cream</div></div>
-        </div>
-        <div class="port-card" style="aspect-ratio:9/16;background:linear-gradient(145deg,#0f0820,#1a0d28)" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030806/Creeo_Cr.5_Facial_Cream_-_Bathtub_sa65ya.jpg','Bathtub','Creeo Cr.5 Facial Cream','MOOD')">
-          <div class="port-grid-inner"></div><div class="corner tl"></div>
-          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030806/Creeo_Cr.5_Facial_Cream_-_Bathtub_sa65ya.jpg" alt="Creeo Cr.5 Facial Cream – Spa Bathtub Mood Shot" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85" onerror="this.style.display='none'">
-          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
-          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">MOOD</span></span>
-          <span style='position:absolute;top:10px;right:10px;width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 5px #4ade80;display:block'></span>
-          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Bathtub</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Creeo Cr.5 Facial Cream</div></div>
-        </div>
-        <div class="port-card" style="aspect-ratio:9/16;background:linear-gradient(145deg,#180d30,#100820)" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030828/Creeo_Cr.5_Facial_Cream_-_Tippie_Toe_nqwmda.jpg','Tippie Toe','Creeo Cr.5 Facial Cream','EDITORIAL')">
-          <div class="port-grid-inner"></div><div class="corner tl"></div>
-          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030828/Creeo_Cr.5_Facial_Cream_-_Tippie_Toe_nqwmda.jpg" alt="Creeo Cr.5 Facial Cream – Elegant Tippie Toe Editorial" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85" onerror="this.style.display='none'">
-          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
-          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">EDITORIAL</span></span>
-          <span style='position:absolute;top:10px;right:10px;width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 5px #4ade80;display:block'></span>
-          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Tippie Toe</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Creeo Cr.5 Facial Cream</div></div>
-        </div>
-      </div>
-
-      <div id="cat-BC" style="display:none;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px">
-        <div class="port-card" style="aspect-ratio:9/16;background:linear-gradient(145deg,#1a0800,#0f0500)" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030646/Cr.5_Chips_-_Front_odvw8p.png','Front Hero','Cr.5 Premium Chips','HERO')">
-          <div class="port-grid-inner"></div><div class="corner tl"></div>
-          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030646/Cr.5_Chips_-_Front_odvw8p.png" alt="Cr.5 Premium Chips – Hero Product Front Shot" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85" onerror="this.style.display='none'">
-          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
-          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">HERO</span></span>
-          <span style='position:absolute;top:10px;right:10px;width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 5px #4ade80;display:block'></span>
-          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Front Hero</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Cr.5 Premium Chips</div></div>
-        </div>
-        <div class="port-card" style="aspect-ratio:9/16;background:linear-gradient(145deg,#200a00,#150800)" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030651/Cr.5_Chips_-_Ingredients_oyvq1c.png','Ingredients','Cr.5 Premium Chips','INGREDIENTS')">
-          <div class="port-grid-inner"></div><div class="corner tl"></div>
-          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030651/Cr.5_Chips_-_Ingredients_oyvq1c.png" alt="Cr.5 Premium Chips – Fresh Ingredients Styling" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85" onerror="this.style.display='none'">
-          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
-          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">INGREDIENTS</span></span>
-          <span style='position:absolute;top:10px;right:10px;width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 5px #4ade80;display:block'></span>
-          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Ingredients</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Cr.5 Premium Chips</div></div>
-        </div>
-        <div class="port-card" style="aspect-ratio:9/16;background:linear-gradient(145deg,#180800,#100600)" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030653/Cr.5_Chips_-_Table_Top_pmqm5b.png','Table Top','Cr.5 Premium Chips','EDITORIAL')">
-          <div class="port-grid-inner"></div><div class="corner tl"></div>
-          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030653/Cr.5_Chips_-_Table_Top_pmqm5b.png" alt="Cr.5 Premium Chips – Gourmet Table Top Editorial" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85" onerror="this.style.display='none'">
-          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
-          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">EDITORIAL</span></span>
-          <span style='position:absolute;top:10px;right:10px;width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 5px #4ade80;display:block'></span>
-          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Table Top</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Cr.5 Premium Chips</div></div>
-        </div>
-        <div class="port-card" style="aspect-ratio:9/16;background:linear-gradient(145deg,#1a0a00,#0f0800)" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030660/Cr.5_Chips_-_Side_saqnpp.jpg','Side View','Cr.5 Premium Chips','PRODUCT')">
-          <div class="port-grid-inner"></div><div class="corner tl"></div>
-          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030660/Cr.5_Chips_-_Side_saqnpp.jpg" alt="Cr.5 Premium Chips – Premium Side View Product Shot" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85" onerror="this.style.display='none'">
+          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200500/arc7_hose_produktfoto_dunkler_hintergrund_uqq0jx.png" alt="Studio Dark — ARC-7 Cargo" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.88" onerror="this.style.display='none'">
           <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
           <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">PRODUCT</span></span>
-          <span style='position:absolute;top:10px;right:10px;width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 5px #4ade80;display:block'></span>
-          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Side View</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Cr.5 Premium Chips</div></div>
+          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Studio Dark</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">ARC-7 Cargo</div></div>
         </div>
-        <div class="port-card" style="aspect-ratio:9/16;background:linear-gradient(145deg,#150800,#200a00)" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030681/Cr.5_Chips_-_Locker_Room_ezkyur.jpg','Locker Room','Cr.5 Premium Chips','LIFESTYLE')">
+        <div class="port-card" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200500/arc7_hose_detail_patch_closeup_bjbd4k.png','Patch Detail','ARC-7 Cargo','DETAIL')">
           <div class="port-grid-inner"></div><div class="corner tl"></div>
-          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030681/Cr.5_Chips_-_Locker_Room_ezkyur.jpg" alt="Cr.5 Premium Chips – Athletic Locker Room Lifestyle" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85" onerror="this.style.display='none'">
+          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200500/arc7_hose_detail_patch_closeup_bjbd4k.png" alt="Patch Detail — ARC-7 Cargo" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.88" onerror="this.style.display='none'">
+          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
+          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">DETAIL</span></span>
+          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Patch Detail</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">ARC-7 Cargo</div></div>
+        </div>
+        <div class="port-card" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200506/arc7_hose_model_lagerhaus_mehdeb.png','Lagerhaus','ARC-7 Cargo','LOOKBOOK')">
+          <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200506/arc7_hose_model_lagerhaus_mehdeb.png" alt="Lagerhaus — ARC-7 Cargo" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.88" onerror="this.style.display='none'">
+          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
+          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">LOOKBOOK</span></span>
+          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Lagerhaus</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">ARC-7 Cargo</div></div>
+        </div>
+        <div class="port-card" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200509/arc7_hose_streetstyle_fahrrad_wvcrzb.png','Street Style','ARC-7 Cargo','LIFESTYLE')">
+          <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200509/arc7_hose_streetstyle_fahrrad_wvcrzb.png" alt="Street Style — ARC-7 Cargo" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.88" onerror="this.style.display='none'">
           <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
           <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">LIFESTYLE</span></span>
-          <span style='position:absolute;top:10px;right:10px;width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 5px #4ade80;display:block'></span>
+          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Street Style</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">ARC-7 Cargo</div></div>
+        </div>
+        <div class="port-card" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200520/arc7_hose_farbvarianten_mannequin_vmoj2i.jpg','Farbvarianten','ARC-7 Cargo','STUDIO')">
+          <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200520/arc7_hose_farbvarianten_mannequin_vmoj2i.jpg" alt="Farbvarianten — ARC-7 Cargo" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.88" onerror="this.style.display='none'">
+          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
+          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">STUDIO</span></span>
+          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Farbvarianten</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">ARC-7 Cargo</div></div>
+        </div>
+        </div>
+      </div><!-- end cat-BF -->
+
+      <!-- ════ LIFESTYLE ════ -->
+      <div id="cat-BL" style="display:none">
+        <!-- Creeo Noir -->
+        <div id="prod-BL-noir" class="img-fmt-grid">
+        <div class="port-card" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030453/Creeo_Noir_Parfum_-_Male_Model_Side_jkdm3u.png','Male Model Side','Creeo Cr.5 Noir','EDITORIAL')">
+          <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030453/Creeo_Noir_Parfum_-_Male_Model_Side_jkdm3u.png" alt="Male Model Side — Creeo Cr.5 Noir" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.88" onerror="this.style.display='none'">
+          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
+          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">EDITORIAL</span></span>
+          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Male Model Side</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Creeo Cr.5 Noir</div></div>
+        </div>
+        <div class="port-card" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030454/Creeo_Noir_Parfum_-_Male_Model_Front_hjdrch.png','Male Model Front','Creeo Cr.5 Noir','HERO')">
+          <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030454/Creeo_Noir_Parfum_-_Male_Model_Front_hjdrch.png" alt="Male Model Front — Creeo Cr.5 Noir" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.88" onerror="this.style.display='none'">
+          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
+          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">HERO</span></span>
+          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Male Model Front</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Creeo Cr.5 Noir</div></div>
+        </div>
+        <div class="port-card" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030458/Creeo_Noir_Parfum_-_Penthouse_nbujxg.png','Penthouse','Creeo Cr.5 Noir','LIFESTYLE')">
+          <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030458/Creeo_Noir_Parfum_-_Penthouse_nbujxg.png" alt="Penthouse — Creeo Cr.5 Noir" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.88" onerror="this.style.display='none'">
+          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
+          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">LIFESTYLE</span></span>
+          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Penthouse</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Creeo Cr.5 Noir</div></div>
+        </div>
+        <div class="port-card" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030508/Creeo_Noir_Parfum_-_Candles_d8zbnv.jpg','Candles','Creeo Cr.5 Noir','MOOD')">
+          <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030508/Creeo_Noir_Parfum_-_Candles_d8zbnv.jpg" alt="Candles — Creeo Cr.5 Noir" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.88" onerror="this.style.display='none'">
+          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
+          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">MOOD</span></span>
+          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Candles</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Creeo Cr.5 Noir</div></div>
+        </div>
+        </div>
+        <!-- Nox Ember -->
+        <div id="prod-BL-nox" class="img-fmt-grid" style="display:none">
+        <div class="port-card" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200599/noxember_kerze_produktfoto_marmor_mit_deckel_qv8msa.png','Marmor Hero','Nox Ember','PRODUCT')">
+          <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200599/noxember_kerze_produktfoto_marmor_mit_deckel_qv8msa.png" alt="Marmor Hero — Nox Ember" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.88" onerror="this.style.display='none'">
+          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
+          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">PRODUCT</span></span>
+          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Marmor Hero</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Nox Ember</div></div>
+        </div>
+        <div class="port-card" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200604/noxember_kerze_draufsicht_wachs_zruswe.png','Draufsicht Wachs','Nox Ember','DETAIL')">
+          <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200604/noxember_kerze_draufsicht_wachs_zruswe.png" alt="Draufsicht Wachs — Nox Ember" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.88" onerror="this.style.display='none'">
+          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
+          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">DETAIL</span></span>
+          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Draufsicht Wachs</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Nox Ember</div></div>
+        </div>
+        <div class="port-card" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200607/noxember_kerze_lifestyle_wohnzimmer_pampas_nlabep.png','Wohnzimmer','Nox Ember','LIFESTYLE')">
+          <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200607/noxember_kerze_lifestyle_wohnzimmer_pampas_nlabep.png" alt="Wohnzimmer — Nox Ember" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.88" onerror="this.style.display='none'">
+          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
+          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">LIFESTYLE</span></span>
+          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Wohnzimmer</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Nox Ember</div></div>
+        </div>
+        <div class="port-card" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200608/noxember_kerze_lifestyle_buch_whisky_n6aq90.png','Buch & Whisky','Nox Ember','LIFESTYLE')">
+          <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200608/noxember_kerze_lifestyle_buch_whisky_n6aq90.png" alt="Buch & Whisky — Nox Ember" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.88" onerror="this.style.display='none'">
+          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
+          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">LIFESTYLE</span></span>
+          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Buch & Whisky</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Nox Ember</div></div>
+        </div>
+        <div class="port-card" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200609/noxember_kerze_lifestyle_badewanne_rajo0g.png','Badewanne','Nox Ember','MOOD')">
+          <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200609/noxember_kerze_lifestyle_badewanne_rajo0g.png" alt="Badewanne — Nox Ember" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.88" onerror="this.style.display='none'">
+          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
+          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">MOOD</span></span>
+          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Badewanne</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Nox Ember</div></div>
+        </div>
+        <div class="port-card" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200618/noxember_kerze_detail_etikett_flamme_kuize0.jpg','Flamme Detail','Nox Ember','DETAIL')">
+          <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200618/noxember_kerze_detail_etikett_flamme_kuize0.jpg" alt="Flamme Detail — Nox Ember" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.88" onerror="this.style.display='none'">
+          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
+          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">DETAIL</span></span>
+          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Flamme Detail</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Nox Ember</div></div>
+        </div>
+        </div>
+      </div><!-- end cat-BL -->
+
+      <!-- ════ BEAUTY ════ -->
+      <div id="cat-BB" style="display:none">
+        <!-- Facial Cream -->
+        <div id="prod-BB-cream" class="img-fmt-grid">
+        <div class="port-card" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030787/Creeo_Cr.5_Facial_Cream_-_Front_wlrakt.png','Front Hero','Facial Cream','HERO')">
+          <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030787/Creeo_Cr.5_Facial_Cream_-_Front_wlrakt.png" alt="Front Hero — Facial Cream" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.88" onerror="this.style.display='none'">
+          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
+          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">HERO</span></span>
+          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Front Hero</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Facial Cream</div></div>
+        </div>
+        <div class="port-card" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030791/Creeo_Cr.5_Facial_Cream_-_Sink_c6dw2k.png','Sink Scene','Facial Cream','LIFESTYLE')">
+          <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030791/Creeo_Cr.5_Facial_Cream_-_Sink_c6dw2k.png" alt="Sink Scene — Facial Cream" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.88" onerror="this.style.display='none'">
+          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
+          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">LIFESTYLE</span></span>
+          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Sink Scene</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Facial Cream</div></div>
+        </div>
+        <div class="port-card" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030796/Creeo_Cr.5_Facial_Cream_-_Application_uzaf9x.png','Application','Facial Cream','UGC')">
+          <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030796/Creeo_Cr.5_Facial_Cream_-_Application_uzaf9x.png" alt="Application — Facial Cream" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.88" onerror="this.style.display='none'">
+          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
+          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">UGC</span></span>
+          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Application</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Facial Cream</div></div>
+        </div>
+        <div class="port-card" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030806/Creeo_Cr.5_Facial_Cream_-_Bathtub_sa65ya.jpg','Bathtub','Facial Cream','MOOD')">
+          <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030806/Creeo_Cr.5_Facial_Cream_-_Bathtub_sa65ya.jpg" alt="Bathtub — Facial Cream" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.88" onerror="this.style.display='none'">
+          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
+          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">MOOD</span></span>
+          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Bathtub</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Facial Cream</div></div>
+        </div>
+        <div class="port-card" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030828/Creeo_Cr.5_Facial_Cream_-_Tippie_Toe_nqwmda.jpg','Tippie Toe','Facial Cream','EDITORIAL')">
+          <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030828/Creeo_Cr.5_Facial_Cream_-_Tippie_Toe_nqwmda.jpg" alt="Tippie Toe — Facial Cream" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.88" onerror="this.style.display='none'">
+          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
+          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">EDITORIAL</span></span>
+          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Tippie Toe</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Facial Cream</div></div>
+        </div>
+        </div>
+        <!-- Aura Glow -->
+        <div id="prod-BB-aura" class="img-fmt-grid" style="display:none">
+        <div class="port-card" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200554/auraglow_serum_produktfoto_tropfen_weisser_hintergrund_zlgnje.png','Studio White','Aura Glow Serum','PRODUCT')">
+          <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200554/auraglow_serum_produktfoto_tropfen_weisser_hintergrund_zlgnje.png" alt="Studio White — Aura Glow Serum" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.88" onerror="this.style.display='none'">
+          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
+          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">PRODUCT</span></span>
+          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Studio White</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Aura Glow Serum</div></div>
+        </div>
+        <div class="port-card" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200560/auraglow_serum_detail_tropfen_nahaufnahme_ughcnk.png','Tropfen Detail','Aura Glow Serum','DETAIL')">
+          <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200560/auraglow_serum_detail_tropfen_nahaufnahme_ughcnk.png" alt="Tropfen Detail — Aura Glow Serum" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.88" onerror="this.style.display='none'">
+          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
+          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">DETAIL</span></span>
+          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Tropfen Detail</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Aura Glow Serum</div></div>
+        </div>
+        <div class="port-card" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200563/auraglow_serum_lifestyle_marmor_prisma_q8iz1y.png','Marmor Prisma','Aura Glow Serum','LIFESTYLE')">
+          <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200563/auraglow_serum_lifestyle_marmor_prisma_q8iz1y.png" alt="Marmor Prisma — Aura Glow Serum" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.88" onerror="this.style.display='none'">
+          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
+          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">LIFESTYLE</span></span>
+          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Marmor Prisma</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Aura Glow Serum</div></div>
+        </div>
+        <div class="port-card" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200564/auraglow_serum_hand_haelt_flasche_bt4x7k.png','Hand & Flasche','Aura Glow Serum','UGC')">
+          <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200564/auraglow_serum_hand_haelt_flasche_bt4x7k.png" alt="Hand & Flasche — Aura Glow Serum" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.88" onerror="this.style.display='none'">
+          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
+          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">UGC</span></span>
+          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Hand & Flasche</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Aura Glow Serum</div></div>
+        </div>
+        <div class="port-card" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200566/auraglow_serum_flatlay_jade_roller_blumen_bgvbrk.png','Flatlay Blumen','Aura Glow Serum','LOOKBOOK')">
+          <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200566/auraglow_serum_flatlay_jade_roller_blumen_bgvbrk.png" alt="Flatlay Blumen — Aura Glow Serum" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.88" onerror="this.style.display='none'">
+          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
+          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">LOOKBOOK</span></span>
+          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Flatlay Blumen</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Aura Glow Serum</div></div>
+        </div>
+        </div>
+      </div><!-- end cat-BB -->
+
+      <!-- ════ FOOD ════ -->
+      <div id="cat-BC" style="display:none">
+        <!-- Cr.5 Chips -->
+        <div id="prod-BC-chips" class="img-fmt-grid">
+        <div class="port-card" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030646/Cr.5_Chips_-_Front_odvw8p.png','Front Hero','Cr.5 Premium Chips','HERO')">
+          <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030646/Cr.5_Chips_-_Front_odvw8p.png" alt="Front Hero — Cr.5 Premium Chips" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.88" onerror="this.style.display='none'">
+          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
+          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">HERO</span></span>
+          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Front Hero</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Cr.5 Premium Chips</div></div>
+        </div>
+        <div class="port-card" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030651/Cr.5_Chips_-_Ingredients_oyvq1c.png','Ingredients','Cr.5 Premium Chips','INGREDIENTS')">
+          <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030651/Cr.5_Chips_-_Ingredients_oyvq1c.png" alt="Ingredients — Cr.5 Premium Chips" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.88" onerror="this.style.display='none'">
+          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
+          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">INGREDIENTS</span></span>
+          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Ingredients</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Cr.5 Premium Chips</div></div>
+        </div>
+        <div class="port-card" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030653/Cr.5_Chips_-_Table_Top_pmqm5b.png','Table Top','Cr.5 Premium Chips','EDITORIAL')">
+          <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030653/Cr.5_Chips_-_Table_Top_pmqm5b.png" alt="Table Top — Cr.5 Premium Chips" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.88" onerror="this.style.display='none'">
+          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
+          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">EDITORIAL</span></span>
+          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Table Top</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Cr.5 Premium Chips</div></div>
+        </div>
+        <div class="port-card" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030660/Cr.5_Chips_-_Side_saqnpp.jpg','Side View','Cr.5 Premium Chips','PRODUCT')">
+          <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030660/Cr.5_Chips_-_Side_saqnpp.jpg" alt="Side View — Cr.5 Premium Chips" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.88" onerror="this.style.display='none'">
+          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
+          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">PRODUCT</span></span>
+          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Side View</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Cr.5 Premium Chips</div></div>
+        </div>
+        <div class="port-card" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030681/Cr.5_Chips_-_Locker_Room_ezkyur.jpg','Locker Room','Cr.5 Premium Chips','LIFESTYLE')">
+          <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030681/Cr.5_Chips_-_Locker_Room_ezkyur.jpg" alt="Locker Room — Cr.5 Premium Chips" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.88" onerror="this.style.display='none'">
+          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
+          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">LIFESTYLE</span></span>
           <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Locker Room</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Cr.5 Premium Chips</div></div>
         </div>
-        <div class="port-card" style="aspect-ratio:9/16;background:linear-gradient(145deg,#200800,#180a00)" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030696/Cr.5_Chips_-_Explosion_vaq7qf.jpg','Explosion','Cr.5 Premium Chips','DYNAMIC')">
+        <div class="port-card" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030696/Cr.5_Chips_-_Explosion_vaq7qf.jpg','Explosion','Cr.5 Premium Chips','DYNAMIC')">
           <div class="port-grid-inner"></div><div class="corner tl"></div>
-          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030696/Cr.5_Chips_-_Explosion_vaq7qf.jpg" alt="Cr.5 Premium Chips – Dynamic Ingredient Explosion Shot" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.85" onerror="this.style.display='none'">
+          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030696/Cr.5_Chips_-_Explosion_vaq7qf.jpg" alt="Explosion — Cr.5 Premium Chips" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.88" onerror="this.style.display='none'">
           <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
           <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">DYNAMIC</span></span>
-          <span style='position:absolute;top:10px;right:10px;width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 5px #4ade80;display:block'></span>
           <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Explosion</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Cr.5 Premium Chips</div></div>
         </div>
-      </div>
+        </div>
+        <!-- Solara Cold Brew -->
+        <div id="prod-BC-solara" class="img-fmt-grid" style="display:none">
+        <div class="port-card" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200376/solara_coldbrew_produktfoto_reflektiv_dunkel_tkw3oz.png','Reflektiv Dark','Solara Cold Brew','PRODUCT')">
+          <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200376/solara_coldbrew_produktfoto_reflektiv_dunkel_tkw3oz.png" alt="Reflektiv Dark — Solara Cold Brew" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.88" onerror="this.style.display='none'">
+          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
+          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">PRODUCT</span></span>
+          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Reflektiv Dark</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Solara Cold Brew</div></div>
+        </div>
+        <div class="port-card" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200379/solara_coldbrew_produktfoto_dramatisch_dunkel_xuxzjm.png','Dramatisch Dark','Solara Cold Brew','PRODUCT')">
+          <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200379/solara_coldbrew_produktfoto_dramatisch_dunkel_xuxzjm.png" alt="Dramatisch Dark — Solara Cold Brew" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.88" onerror="this.style.display='none'">
+          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
+          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">PRODUCT</span></span>
+          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Dramatisch Dark</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Solara Cold Brew</div></div>
+        </div>
+        <div class="port-card" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200382/solara_coldbrew_einschenken_glas_eis_zxywyf.png','Einschenken','Solara Cold Brew','DYNAMIC')">
+          <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200382/solara_coldbrew_einschenken_glas_eis_zxywyf.png" alt="Einschenken — Solara Cold Brew" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.88" onerror="this.style.display='none'">
+          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
+          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">DYNAMIC</span></span>
+          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Einschenken</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Solara Cold Brew</div></div>
+        </div>
+        <div class="port-card" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200386/solara_coldbrew_lifestyle_holztisch_kaffeebohnen_m0mzpc.png','Holztisch','Solara Cold Brew','LIFESTYLE')">
+          <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200386/solara_coldbrew_lifestyle_holztisch_kaffeebohnen_m0mzpc.png" alt="Holztisch — Solara Cold Brew" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.88" onerror="this.style.display='none'">
+          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
+          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">LIFESTYLE</span></span>
+          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Holztisch</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Solara Cold Brew</div></div>
+        </div>
+        <div class="port-card" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200395/solara_coldbrew_detail_etikett_schwarz_lku7r3.png','Etikett Detail','Solara Cold Brew','DETAIL')">
+          <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200395/solara_coldbrew_detail_etikett_schwarz_lku7r3.png" alt="Etikett Detail — Solara Cold Brew" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.88" onerror="this.style.display='none'">
+          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
+          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">DETAIL</span></span>
+          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Etikett Detail</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Solara Cold Brew</div></div>
+        </div>
+        <div class="port-card" onclick="openImage('https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200429/solara_coldbrew_hand_strasse_lifestyle_bpyldq.jpg','Hand & Straße','Solara Cold Brew','LIFESTYLE')">
+          <div class="port-grid-inner"></div><div class="corner tl"></div>
+          <img src="https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200429/solara_coldbrew_hand_strasse_lifestyle_bpyldq.jpg" alt="Hand & Straße — Solara Cold Brew" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.88" onerror="this.style.display='none'">
+          <div class="port-overlay"><div class="play-btn" style="font-size:14px">⊕</div></div>
+          <span style="position:absolute;top:10px;left:10px"><span class="tag tag-dark" style="font-size:8px">LIFESTYLE</span></span>
+          <div class="port-bottom"><div style="font-weight:600;font-size:12px;color:#fff">Hand & Straße</div><div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue)">Solara Cold Brew</div></div>
+        </div>
+        </div>
+      </div><!-- end cat-BC -->
+
     </div><!-- end port-bilder -->
 
     <!-- Footer note -->
@@ -1548,6 +1764,37 @@ function closeMobileMenu() {
   document.getElementById('hamburger').classList.remove('ham-open');
 }
 
+
+// ── IMAGE FORMAT TOGGLE ────────────────────────────────────────────────────────
+function setImgFmt(fmt){
+  const grids = document.querySelectorAll('.img-fmt-grid');
+  const btn916 = document.getElementById('fmt-916');
+  const btn169 = document.getElementById('fmt-169');
+  if(fmt==='169'){
+    grids.forEach(g=>g.classList.add('fmt-169'));
+    btn169.style.background='var(--orange)'; btn169.style.color='#fff';
+    btn916.style.background='transparent'; btn916.style.color='var(--blue)';
+  } else {
+    grids.forEach(g=>g.classList.remove('fmt-169'));
+    btn916.style.background='var(--orange)'; btn916.style.color='#fff';
+    btn169.style.background='transparent'; btn169.style.color='var(--blue)';
+  }
+}
+
+// ── PRODUCT SUB-TAB SWITCH ────────────────────────────────────────────────────
+function switchProd(cat, prod, btn){
+  // Hide all products in this category
+  const catEl = document.getElementById('cat-'+cat);
+  catEl.querySelectorAll('[id^="prod-'+cat+'-"]').forEach(el=>{
+    el.style.display='none';
+  });
+  // Show selected
+  document.getElementById('prod-'+cat+'-'+prod).style.display='grid';
+  // Update active state
+  document.getElementById('prod-tabs-'+cat).querySelectorAll('.prod-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
 // ── PORTFOLIO: TYPE + CATEGORY SWITCH ────────────────────────────────────────
 function switchType(type){
   const vids = document.getElementById('port-videos');
@@ -1571,13 +1818,17 @@ function switchType(type){
 
 function switchCatV(id, btn){
   ['VF','VL','VB','VC'].forEach(c=>{ const el=document.getElementById('cat-'+c); if(el) el.style.display='none'; });
-  document.getElementById('cat-'+id).style.display='grid';
+  document.getElementById('cat-'+id).style.display='block';
+  const pt=document.getElementById('prod-tabs-'+id); if(pt) pt.style.display='flex';
   document.querySelectorAll('#port-videos .cat-tab').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
 }
 
 function switchCatB(id, btn){
-  ['BF','BL','BB','BC'].forEach(c=>{ const el=document.getElementById('cat-'+c); if(el) el.style.display='none'; });
+  ['BF','BL','BB','BC'].forEach(c=>{
+      const el=document.getElementById('cat-'+c); if(el) el.style.display='none';
+      const pt=document.getElementById('prod-tabs-'+c); if(pt) pt.style.display='none';
+    });
   const el = document.getElementById('cat-'+id);
   el.style.display='grid';
   document.querySelectorAll('#port-bilder .cat-tab').forEach(b=>b.classList.remove('active'));
@@ -1703,6 +1954,19 @@ const ALL_IMAGES = [
   { url: 'https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030796/Creeo_Cr.5_Facial_Cream_-_Application_uzaf9x.png',sub:'Facial Cream · Application'},
   { url: 'https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030806/Creeo_Cr.5_Facial_Cream_-_Bathtub_sa65ya.jpg',  sub: 'Facial Cream · Bathtub'     },
   { url: 'https://res.cloudinary.com/dga2fdwnj/image/upload/v1781030828/Creeo_Cr.5_Facial_Cream_-_Tippie_Toe_nqwmda.jpg',sub:'Facial Cream · Tippie Toe' },
+
+  { url: 'https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200496/arc7_hose_3d_render_vese2s.png',                   sub: 'ARC-7 Cargo · 3D Render'         },
+  { url: 'https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200506/arc7_hose_model_lagerhaus_mehdeb.png',              sub: 'ARC-7 Cargo · Lagerhaus'         },
+  { url: 'https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200509/arc7_hose_streetstyle_fahrrad_wvcrzb.png',          sub: 'ARC-7 Cargo · Street Style'      },
+  { url: 'https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200599/noxember_kerze_produktfoto_marmor_mit_deckel_qv8msa.png', sub: 'Nox Ember · Marmor Hero'    },
+  { url: 'https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200608/noxember_kerze_lifestyle_buch_whisky_n6aq90.png',   sub: 'Nox Ember · Buch & Whisky'       },
+  { url: 'https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200609/noxember_kerze_lifestyle_badewanne_rajo0g.png',     sub: 'Nox Ember · Badewanne'           },
+  { url: 'https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200554/auraglow_serum_produktfoto_tropfen_weisser_hintergrund_zlgnje.png', sub: 'Aura Glow · Studio' },
+  { url: 'https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200563/auraglow_serum_lifestyle_marmor_prisma_q8iz1y.png', sub: 'Aura Glow · Marmor Prisma'       },
+  { url: 'https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200566/auraglow_serum_flatlay_jade_roller_blumen_bgvbrk.png', sub: 'Aura Glow · Flatlay'          },
+  { url: 'https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200379/solara_coldbrew_produktfoto_dramatisch_dunkel_xuxzjm.png', sub: 'Solara Cold Brew · Dark'  },
+  { url: 'https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200382/solara_coldbrew_einschenken_glas_eis_zxywyf.png',   sub: 'Solara Cold Brew · Pour'         },
+  { url: 'https://res.cloudinary.com/dga2fdwnj/image/upload/v1781200429/solara_coldbrew_hand_strasse_lifestyle_bpyldq.jpg', sub: 'Solara Cold Brew · Street'       },
 ];
 
 function shuffleArr(arr) {
